@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:background="@android:color/white"
+    android:layout_height="match_parent"
+    android:weightSum="1">
+
+    <TextView
+        android:text="Diaplay the QR CODE for verification at counter x or contact for desk help."
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/body"
+        android:gravity="center"
+        android:padding="10dp"
+        android:textSize="18dp"
+        android:textStyle="bold"
+        android:id="@+id/textView15"
+        android:layout_weight="1" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/barcode"
+        android:layout_below="@+id/textView15"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        android:id="@+id/imageView5" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="55dp"
+        android:id="@+id/verify"
+        android:layout_margin="10dp"
+        android:textColor="@android:color/white"
+        android:textSize="18dp"
+        android:textStyle="bold"
+        android:text="Verify later"
+        android:background="@color/body"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <Button
+        android:text="Verification Done? Click here"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/verify_done"
+        android:textColor="@android:color/white"
+        android:textSize="18dp"
+        android:textStyle="bold"
+        android:background="@color/body"
+        android:layout_above="@+id/verify"
+        android:layout_alignLeft="@+id/verify"
+        android:layout_alignStart="@+id/verify"
+        android:layout_alignRight="@+id/verify"
+        android:layout_alignEnd="@+id/verify" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/barcode_scan"
+        android:layout_below="@+id/imageView5"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/imageView7" />
+</RelativeLayout>
