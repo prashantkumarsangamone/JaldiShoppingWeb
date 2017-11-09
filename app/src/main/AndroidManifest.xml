@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.CAMERA"></uses-permission>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.VIBRATE"/>
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -49,6 +50,7 @@
             android:name=".HomePageActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait"
+            android:noHistory="true"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden" />
         <activity
@@ -133,8 +135,8 @@
             android:name=".OffersActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".BarCodeScanActivity"
-            android:label="@string/title_activity_bar_code_scan"
+            android:name=".ShoppingCartPageActivity"
+            android:label="Shopping Cart"
             android:parentActivityName=".HomePageActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -184,18 +186,18 @@
         <activity
             android:name=".ProductDetailsCartActivity"
             android:label="Product Details"
-            android:parentActivityName=".BarCodeScanActivity">
+            android:parentActivityName=".ShoppingCartPageActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".BarCodeScanActivity" />
+                android:value=".ShoppingCartPageActivity" />
         </activity>
         <activity
             android:name=".MainRecycleActivity"
             android:label="Product Details"
-            android:parentActivityName=".BarCodeScanActivity">
+            android:parentActivityName=".ShoppingCartPageActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".BarCodeScanActivity" />
+                android:value=".ShoppingCartPageActivity" />
         </activity>
         <activity
         android:name=".PaymentStatusActivity"

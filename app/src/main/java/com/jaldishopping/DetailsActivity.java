@@ -78,7 +78,7 @@ public class DetailsActivity extends AppCompatActivity
         shoppingCartView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(DetailsActivity.this, ShoppigListActivity.class);
+                Intent i = new Intent(DetailsActivity.this, ShoppingCartPageActivity.class);
                 startActivity(i);
 
             }
@@ -254,6 +254,10 @@ public class DetailsActivity extends AppCompatActivity
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
+            Intent i = new Intent(this, HomePageActivity.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(i);
+            this.finish();
         }
     }
 
@@ -264,7 +268,7 @@ public class DetailsActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_home) {
-            Intent i = new Intent(DetailsActivity.this, HomeActivity.class);
+            Intent i = new Intent(DetailsActivity.this, HomePageActivity.class);
             startActivity(i);
 
         } else if (id == R.id.nav_profile) {

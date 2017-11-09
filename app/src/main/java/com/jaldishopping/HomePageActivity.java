@@ -11,6 +11,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.design.internal.NavigationMenuView;
@@ -67,7 +68,7 @@ public class HomePageActivity extends AppCompatActivity
 
     RecyclerView horizontal_recycler_vieww;
     RecyclerAdapterViewFirst horizontalAdapterr;
-
+    boolean doubleBackToExitPressedOnce = false;
     private List<Data> data,datasecond;
 
 
@@ -100,7 +101,7 @@ public class HomePageActivity extends AppCompatActivity
         shoppingCartView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(HomePageActivity.this, ShoppigListActivity.class);
+                Intent i = new Intent(HomePageActivity.this, ShoppingCartPageActivity.class);
                 startActivity(i);
             }
         });
@@ -199,8 +200,7 @@ public class HomePageActivity extends AppCompatActivity
         LinearLayoutManager horizontalLayoutManagerr = new LinearLayoutManager(HomePageActivity.this, LinearLayoutManager.HORIZONTAL, false);
         horizontal_recycler_vieww.setLayoutManager(horizontalLayoutManagerr);
         horizontal_recycler_vieww.setAdapter(horizontalAdapterr);
-        horizontal_recycler_view.addOnItemTouchListener(new RecyclerTouchListener(this,
-                horizontal_recycler_view, new ClickListener() {
+        horizontal_recycler_view.addOnItemTouchListener(new RecyclerTouchListener(this, horizontal_recycler_view, new ClickListener() {
             @Override
             public void onClick(View view, final int position) {
 
@@ -213,6 +213,7 @@ public class HomePageActivity extends AppCompatActivity
                     value="Hyper City";
                 }
                 Intent i = new Intent(HomePageActivity.this, DetailsActivity.class);
+
                 i.putExtra("check",true);
                 i.putExtra("value",value);
                 startActivity(i);
@@ -252,7 +253,10 @@ public class HomePageActivity extends AppCompatActivity
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
+
+            finish();
         }
+
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -262,7 +266,7 @@ public class HomePageActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_home) {
-            Intent i = new Intent(HomePageActivity.this, HomeActivity.class);
+            Intent i = new Intent(HomePageActivity.this, HomePageActivity.class);
             i.putExtra("check",true);
             startActivity(i);
         } else if (id == R.id.nav_profile) {

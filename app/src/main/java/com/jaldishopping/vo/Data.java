@@ -5,7 +5,7 @@ public class Data {
         public int imageId;
         public String txt;
 
-        Data( int imageId) {
+        public Data( int imageId) {
 
             this.imageId = imageId;
 

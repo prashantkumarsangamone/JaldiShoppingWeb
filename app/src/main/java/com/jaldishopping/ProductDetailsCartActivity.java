@@ -32,7 +32,7 @@ public class ProductDetailsCartActivity extends AppCompatActivity {
     private static int currentPage = 0;
     private static int NUM_PAGES = 0;
     private ArrayList<ImageModel> imageModelArrayList;
-    ExpandableListView expandableList;
+
     private int[] myImageList = new int[]{R.drawable.almonds1, R.drawable.almonds1
             };
     private FloatingActionButton fab;
@@ -47,8 +47,9 @@ public class ProductDetailsCartActivity extends AppCompatActivity {
         setContentView(R.layout.scanned_product_details_layout);
 
         wishList = (ImageView)findViewById(R.id.imageView9);
-        incrTxt  = (Button)findViewById(R.id.increment);
-        decrTxt  = (Button)findViewById(R.id.textView28);
+
+        decrTxt  = (Button)findViewById(R.id.increment);
+        incrTxt  = (Button)findViewById(R.id.textView28);
         num = (TextView)findViewById(R.id.button7);
         incrTxt.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -119,12 +120,12 @@ public class ProductDetailsCartActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent in = new Intent(ProductDetailsCartActivity.this, DetailsActivity.class);
+                Intent in = new Intent(ProductDetailsCartActivity.this, ShoppingCartPageActivity.class);
                 String quantity = num.getText().toString();
                 editor.putString("quantityCount", quantity);
                 editor.putBoolean("check", true);
+                editor.putBoolean("f", true);
                 editor.commit();
-                in.putExtra("f",true);
 
                 startActivity(in);
             }
@@ -181,5 +182,13 @@ public class ProductDetailsCartActivity extends AppCompatActivity {
 
             }
         });
+    }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent i = new Intent(this, DetailsActivity.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(i);
+        this.finish();
     }
 }

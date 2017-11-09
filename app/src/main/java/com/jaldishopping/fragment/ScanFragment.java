@@ -4,31 +4,46 @@ package com.jaldishopping.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.AudioManager;
+import android.media.ToneGenerator;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.v4.app.Fragment;
+import android.util.Log;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ListView;
+import android.widget.EditText;
 import android.widget.Toast;
 
-import com.jaldishopping.BarCodeScanActivity;
-import com.jaldishopping.BillingSummaryActivity;
+import com.google.android.gms.vision.CameraSource;
+import com.google.android.gms.vision.Detector;
+import com.google.android.gms.vision.barcode.Barcode;
+import com.google.android.gms.vision.barcode.BarcodeDetector;
+import com.jaldishopping.ProductDetailsCartActivity;
 import com.jaldishopping.R;
-import com.jaldishopping.adapter.OrderItemsAdapter;
 
-import java.util.ArrayList;
+import java.io.IOException;
 
 public class ScanFragment extends Fragment {
 
     View view;
-    Button scanBtn, checkoutBtn;
-    ListView ls;
+
+    int i;
+    private BarcodeDetector barcodeDetector;
+    private CameraSource cameraSource;
+    private SurfaceView cameraView;
+    private EditText barcodeValue;
+    private Button sendOk;
+    public Vibrator v;
     SharedPreferences pref ;
     SharedPreferences.Editor editor;
     boolean f;
-    String barcodeValue;
+
     public ScanFragment() {
 
     }
@@ -38,95 +53,106 @@ public class ScanFragment extends Fragment {
                              Bundle savedInstanceState) {
         boolean f =getActivity().getIntent().getBooleanExtra("f",false);
 
-            view = inflater.inflate(R.layout.scanbarcode_checkout_layout, container, false);
+            view = inflater.inflate(R.layout.scan_layout, container, false);
 
-
-            ls = (ListView) view.findViewById(R.id.list);
             pref = getActivity().getSharedPreferences("jaldi_shopping_pref", Context.MODE_PRIVATE);
             editor = pref.edit();
+        barcodeValue = (EditText)view.findViewById(R.id.editText2);
+        sendOk= (Button) view.findViewById(R.id.button2);
 
-            barcodeValue = getActivity().getIntent().getStringExtra("barcodeValue");
+        v = (Vibrator) getContext().getSystemService(Context.VIBRATOR_SERVICE);
+        cameraView = (SurfaceView)view.findViewById(R.id.surface_view);
 
-            if (f == true) {
-               /* final Dialog dialog = new Dialog(getActivity());
-                // Include dialog.xml file
-                dialog.setContentView(R.layout.checkout_dialog);
-                dialog.show();
 
-                Button wishlistButton = (Button) dialog.findViewById(R.id.button3);
-                Button cartButton = (Button) dialog.findViewById(R.id.button4);
-                // if decline button is clicked, close the custom dialog
-                wishlistButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        // Close dialog
-                        Toast.makeText(getActivity(), "Added to WishList.", Toast.LENGTH_LONG).show();
-                    }
-                });
-                cartButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {*/
-                        // Close dialog
-                        Toast.makeText(getActivity(), "Added to Cart.", Toast.LENGTH_LONG).show();
-                        ArrayList<String> planetList = new ArrayList<String>();
-                        planetList.add("1");
-                        OrderItemsAdapter adapter = new OrderItemsAdapter(getActivity(), R.layout.order_checkout_list_item, planetList);
-                        ls.setAdapter(adapter);
-                    /*    dialog.dismiss();
-                    }
-                });*/
-            }
-           else
+
+        pref = getActivity().getSharedPreferences("jaldi_shopping_pref", Context.MODE_PRIVATE);
+        editor = pref.edit();
+
+        sendOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
             {
+                if(barcodeValue.getText().toString().equals("")){
+                    Toast.makeText(getActivity(),"Can't Scan?.  Enter Barcode",Toast.LENGTH_LONG).show();
+                }
+                else
+                {
+                    Intent in = new Intent(getActivity(), ProductDetailsCartActivity.class);
+                    startActivity(in);
+                }
+            }
+        });
 
-                LayoutInflater lf1 = getActivity().getLayoutInflater();
-                View rootview1 = lf1.inflate(R.layout.scanbarcode_checkout_empty_layout,container, false);
-                scanBtn = (Button) rootview1.findViewById(R.id.scan_barcode);
+        barcodeDetector = new BarcodeDetector.Builder(getActivity())
+                .setBarcodeFormats(Barcode.ALL_FORMATS)
+                .build();
 
-                scanBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
+        cameraSource = new CameraSource.Builder(getActivity(), barcodeDetector).setRequestedPreviewSize(640,480).setAutoFocusEnabled(true).build();
 
-                        Intent in = new Intent(getActivity(), BarCodeScanActivity.class);
+        cameraView.getHolder().addCallback(new SurfaceHolder.Callback() {
+            @Override
+            public void surfaceCreated(SurfaceHolder holder) {
+                try {
+                    //noinspection MissingPermission
+                    cameraSource.start(cameraView.getHolder());
 
-                        startActivity(in);
-                        getActivity().finish();
-                    }
-                });
-                return rootview1;
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
             }
 
-            scanBtn = (Button) view.findViewById(R.id.scan_barcode);
+            @Override
+            public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+            }
 
-            checkoutBtn = (Button) view.findViewById(R.id.check_out);
+            @Override
+            public void surfaceDestroyed(SurfaceHolder holder) {
+                cameraSource.stop();
+            }
+        });
 
-            scanBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+        barcodeDetector.setProcessor(new Detector.Processor<Barcode>() {
+            @Override
+            public void release() {
 
-                    Intent in = new Intent(getActivity(), BarCodeScanActivity.class);
+            }
 
-                    startActivity(in);
+            @Override
+            public void receiveDetections(Detector.Detections<Barcode> detections) {
+                final SparseArray<Barcode> barcodes = detections.getDetectedItems();
+                if (barcodes.size() != 0) {
+
+                    barcodeValue.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            v.vibrate(500);
+                            ToneGenerator toneGen1 = new ToneGenerator(AudioManager.STREAM_MUSIC, 100);
+                            toneGen1.startTone(ToneGenerator.TONE_CDMA_PIP,150);
+                            Barcode thisCode = barcodes.valueAt(0);
+                            Log.d("TestTag","barcode value:"+thisCode.displayValue);
+
+                            Intent in = new Intent(getActivity(), ProductDetailsCartActivity.class);
+                            startActivity(in);
+
+                            cameraSource.stop();
+                            getActivity().finish();
+
+                        }
+
+                    });
                 }
-            });
-            checkoutBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    Intent in = new Intent(getActivity(), BillingSummaryActivity.class);
-                    String quantity = pref.getString("quantity", null);
-                    String offer = pref.getString("offer", null);
-                    in.putExtra("offer", "Price:" + offer);
-                    in.putExtra("quantity", quantity);
-                    startActivity(in);
-
-                }
-            });
-
-            return view;
-
+            }
+        });
+        return view;
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        cameraSource.release();
+        barcodeDetector.release();
     }
 
+
+    }
 
