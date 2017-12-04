@@ -12,10 +12,8 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.view.View;
-
 import com.jaldishopping.adapter.OffersAdapter;
 import com.jaldishopping.vo.OffersVO;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -82,9 +80,7 @@ public class OffersActivity extends AppCompatActivity {
         });
     }
 
-    /**
-     * Adding few offers for testing
-     */
+
     private void prepareOffers() {
 
         OffersVO a = new OffersVO("Offers", "a");
@@ -122,7 +118,6 @@ public class OffersActivity extends AppCompatActivity {
         public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
             int position = parent.getChildAdapterPosition(view); // item position
             int column = position % spanCount; // item column
-
             if (includeEdge) {
                 outRect.left = spacing - column * spacing / spanCount; // spacing - column * ((1f / spanCount) * spacing)
                 outRect.right = (column + 1) * spacing / spanCount; // (column + 1) * ((1f / spanCount) * spacing)

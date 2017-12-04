@@ -68,6 +68,7 @@ public class ProductDetailsCartActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String quantity = num.getText().toString();
+
                 int in = Integer.parseInt(quantity);
                 if(in>1){
                     in--;
@@ -75,6 +76,7 @@ public class ProductDetailsCartActivity extends AppCompatActivity {
                 }
             }
         });
+
 
         imageModelArrayList = new ArrayList<>();
         imageModelArrayList = populateList();
@@ -84,8 +86,7 @@ public class ProductDetailsCartActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (i==1) {
                     wishList.setImageResource(R.drawable.wishlist_red);
-
-                    i=2;
+                                      i=2;
                     Toast.makeText(getApplicationContext(),"Added to Wishlist.",Toast.LENGTH_LONG).show();
 
                 } else {
@@ -127,6 +128,7 @@ public class ProductDetailsCartActivity extends AppCompatActivity {
                 editor.putBoolean("f", true);
                 editor.commit();
 
+
                 startActivity(in);
             }
         });
@@ -145,6 +147,7 @@ public class ProductDetailsCartActivity extends AppCompatActivity {
 
         NUM_PAGES =imageModelArrayList.size();
 
+
         // Auto start of viewpager
         final Handler handler = new Handler();
         final Runnable Update = new Runnable() {
@@ -162,6 +165,7 @@ public class ProductDetailsCartActivity extends AppCompatActivity {
                 handler.post(Update);
             }
         }, 3000, 3000);
+
 */
         // Pager listener over indicator
         indicator.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {

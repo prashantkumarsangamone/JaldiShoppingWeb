@@ -41,7 +41,6 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class DetailsActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener  {
 
@@ -97,7 +96,6 @@ public class DetailsActivity extends AppCompatActivity
         categories.add(value);
 
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categories);
-
         // Drop down layout style - list view with radio button
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
@@ -205,10 +203,9 @@ public class DetailsActivity extends AppCompatActivity
 
             }
         });
-
-
         setupViewPager(viewPager);
     }
+
     public static void disableShiftMode(BottomNavigationView view) {
         BottomNavigationMenuView menuView = (BottomNavigationMenuView) view.getChildAt(0);
         try {
@@ -222,7 +219,7 @@ public class DetailsActivity extends AppCompatActivity
                 item.setShiftingMode(false);
 
                 // set once again checked value, so view will be updated
-                //noinspection RestrictedApi
+
                 item.setChecked(item.getItemData().isChecked());
             }
         } catch (NoSuchFieldException e) {
@@ -231,6 +228,7 @@ public class DetailsActivity extends AppCompatActivity
             Log.e("TestTag", "Unable to change value of shift mode", e);
         }
     }
+
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         locateFragment=new LocateFragment();
@@ -244,7 +242,6 @@ public class DetailsActivity extends AppCompatActivity
         adapter.addFragment(offersFragment);
         adapter.addFragment(notificationFragment);
         adapter.addFragment(myListFragment);
-
         viewPager.setAdapter(adapter);
     }
     @Override

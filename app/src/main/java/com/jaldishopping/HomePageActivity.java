@@ -54,8 +54,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class HomePageActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+public class HomePageActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     ArrayList<Uri> arrayListapkFilepath;
     SharedPreferences pref ;
@@ -138,6 +137,7 @@ public class HomePageActivity extends AppCompatActivity
         toggle.syncState();
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
 
         LinearLayout navHeader=(LinearLayout) LayoutInflater.from(this).inflate(R.layout.nav_header_main, null);
         navigationView.addHeaderView(navHeader);
@@ -339,6 +339,7 @@ public class HomePageActivity extends AppCompatActivity
                     View child=recycleView.findChildViewUnder(e.getX(),e.getY());
                     if(child!=null && clicklistener!=null){
                         clicklistener.onLongClick(child,recycleView.getChildAdapterPosition(child));
+
                     }
                 }
             });
@@ -363,6 +364,7 @@ public class HomePageActivity extends AppCompatActivity
 
         }
     }
+
     private  boolean checkAndRequestPermissions() {
 
         int locationPermission = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
@@ -465,8 +467,6 @@ public class HomePageActivity extends AppCompatActivity
 
         List<Data> data = new ArrayList<>();
 
-
-
         data.add(new Data( R.drawable.hypercity_logo));
         data.add(new Data( R.drawable.bigbazaar_logo));
         data.add(new Data( R.drawable.hypercity_logo));
@@ -475,11 +475,10 @@ public class HomePageActivity extends AppCompatActivity
         data.add(new Data( R.drawable.bigbazaar_logo));
         data.add(new Data( R.drawable.hypercity_logo));
         data.add(new Data( R.drawable.bigbazaar_logo));
-
-
 
         return data;
     }
+
     public List<Data> fill_with_dataSecond() {
 
         List<Data> data = new ArrayList<>();

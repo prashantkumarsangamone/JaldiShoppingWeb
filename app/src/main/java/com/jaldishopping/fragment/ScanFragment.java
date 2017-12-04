@@ -63,8 +63,6 @@ public class ScanFragment extends Fragment {
         v = (Vibrator) getContext().getSystemService(Context.VIBRATOR_SERVICE);
         cameraView = (SurfaceView)view.findViewById(R.id.surface_view);
 
-
-
         pref = getActivity().getSharedPreferences("jaldi_shopping_pref", Context.MODE_PRIVATE);
         editor = pref.edit();
 
