@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:security="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+		http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-4.0.xsd">
+
+    <security:global-method-security pre-post-annotations="enabled"></security:global-method-security>
+
+	<!-- enable use-expressions -->
+	<security:http auto-config="true" use-expressions="true" request-matcher="regex" >
+	    
+		<security:csrf disabled="true" />
+
+		<security:intercept-url pattern="/admin*"
+			access="hasAnyRole('ROLE_ADMIN','ROLE_SUPER_ADMIN')" />
+
+		<!-- access denied page -->
+		<security:access-denied-handler
+			error-page="/403" />
+
+		<security:form-login 
+		    login-page="/admin/login"
+			authentication-failure-url="/admin/login?error" 
+			always-use-default-target="true"
+			default-target-url="/admin/home"
+			login-processing-url="/admin/authenticate"
+			username-parameter="username" 
+			password-parameter="password" />
+		<security:logout logout-url="/admin/logout" logout-success-url="/admin/login?logout" delete-cookies="JSESSIONID"/>
+		
+	</security:http>
+
+	<!-- Select users and user_roles from database -->
+	<security:authentication-manager>
+		<security:authentication-provider>
+		     <security:password-encoder hash="sha-256"></security:password-encoder> 
+			<security:jdbc-user-service
+				data-source-ref="dataSource"
+				users-by-username-query="select userEmail,userPassword, enabled from js_user_details where userEmail=?"
+				authorities-by-username-query="select userEmail, authority from js_authorities_details where userEmail=?" 
+				/>
+		</security:authentication-provider>
+	</security:authentication-manager>
+
+</beans>

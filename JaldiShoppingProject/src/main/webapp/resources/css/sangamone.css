@@ -1,0 +1,150 @@
+@CHARSET "UTF-8";
+
+{
+-webkit-box-sizing
+:
+ 
+border-box
+;
+
+	   
+-moz-box-sizing
+:
+ 
+border-box
+;
+
+	        
+box-sizing
+:
+ 
+border-box
+;
+
+	
+outline
+:
+ 
+none
+;
+
+
+}
+
+
+
+#header2{
+ background-color:#FFFFFF;
+          margin-top:-162px;
+           margin-bottom:60px;
+          padding-top:-10px; 
+         height: 100px;
+       
+
+}
+
+
+
+	#header1{
+        background-color:#FFFFFF;
+          margin-top:-162px;
+           margin-bottom:30px;
+         /*  padding-top:-10px; */
+         height: 100px;
+       
+           
+        }
+ #header{
+        background-color:#FFFFFF;
+          margin-top:-110px;
+           margin-bottom:30px;
+          padding-top:-10px;
+         height: 100px;
+       
+           
+        }
+body {
+	background: url("../images/background4.jpg"); 
+	background-repeat: repeat-y;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+	
+}
+
+h1
+{
+	color: black;
+
+}
+
+.login-form {
+	margin-top: 60px;
+}
+
+form[role=login] {
+	color: #5d5d5d;
+	background: #f2f2f2;
+	padding: 26px;
+	border-radius: 10px;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+}
+
+form[role=login] img {
+	display: block;
+	margin: 0 auto;
+	margin-bottom: 35px;
+}
+
+form[role=login] input, form[role=login] button {
+	font-size: 18px;
+	margin: 16px 0;
+}
+
+
+
+form[role=cardNumber] input, form[role=cardNumber] button {
+	font-size: 18px;
+	margin: 10px 0;
+}
+form[role=cardNumber] {	
+	padding: 26px;	
+}
+
+section {
+	/* color: #5d5d5d; */
+	/* background: #f2f2f2; */
+	background: url("../images/background4.jpg"); 
+	background-repeat: repeat-y;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+	height: 80vh;
+	
+}
+
+
+message {
+	text-align: center;
+	font-size: 17px;
+}
+.error {
+	text-align: center;
+	font-size: 17px;
+	color: red;
+}
+.success {
+	text-align: center;
+	font-size: 17px;
+	color: #00bb00;
+}
+
+
+
+
+
+
+

@@ -1,0 +1,192 @@
+
+drop database JaldiShopping;
+create database JaldiShopping;
+use JaldiShopping;
+
+
+/* User Details Table*/
+CREATE TABLE js_user_details (
+  id varchar(255) NOT NULL,
+  userId bigint(20) NOT NULL AUTO_INCREMENT,
+  firstName varchar(30) NOT NULL,
+  lastName varchar(30) NOT NULL,
+  userEmail varchar(30) UNIQUE KEY,
+  userMobile varchar(30) NULL,
+  userPassword varchar(80) NOT NULL,
+  zipCode bigint(20) NULL,
+  enabled tinyint(4) DEFAULT NULL,
+  PRIMARY KEY (userId)
+);
+
+/*
+insert into js_user_details(userId,firstName,lastName,userEmail,userMobile,userPassword,zipCode,enabled) 
+values(1,'Vivek','Marathe','vivekmudupi@gmail.com','8971029302','6000ac4bc22ce6ea4adcae78b0ff87412d05e4c35912c38a740ff6dcbb97b659','576107',1);
+*/
+
+/* Authorites Table*/
+
+create table js_authorities_details (
+      id varchar(255) NOT NULL,
+      authorityId bigint NOT NULL AUTO_INCREMENT PRIMARY KEY, 
+      userEmail varchar(50) not null,
+      authority varchar(50) not null,
+      constraint fk_authorities_js_users foreign key(userEmail) references js_user_details(userEmail)
+      );
+
+/*
+insert into js_authorities_details(authorityId,userEmail,authority) values(1,'vivekmudupi@gmail.com','ROLE_ADMIN');
+*/
+
+/* Location Details Table*/
+create table js_location_details(
+id varchar(255) NOT NULL,
+locationId BIGINT NOT NULL AUTO_INCREMENT,
+locationName varchar(155) NOT NULL,
+latitude varchar(155) NULL,
+longitude varchar(155) NULL,
+country varchar(155) NOT NULL,
+state varchar(155) NOT NULL,
+city varchar(155) NOT NULL,
+PRIMARY KEY (locationId)
+);
+
+
+
+/* Vendor Details Table*/
+create table js_vendor_details(
+id varchar(255) NOT NULL,
+vendorId BIGINT NOT NULL AUTO_INCREMENT,
+vendorName varchar(255) NOT NULL, 
+locationId bigint(20) NOT NULL,
+foreign key (locationId) references js_location_details(locationId),
+PRIMARY KEY (vendorId)
+);
+
+
+/* Category Details Table*/
+create table js_category_details(
+id varchar(255) NOT NULL,
+categoryId BIGINT NOT NULL AUTO_INCREMENT,
+categoryCode varchar(255) NOT NULL, 
+categoryName varchar(255) NOT NULL, 
+PRIMARY KEY (categoryId)
+);
+
+/* Products Details Table*/
+create table js_product_details(
+id varchar(255) NOT NULL,
+productId BIGINT NOT NULL AUTO_INCREMENT,
+productName varchar(155) NOT NULL, 
+productCode varchar(155) NOT NULL,
+barCode varchar(155) NOT NULL,
+productPrice varchar(155) NOT NULL,
+productQuantity varchar(155) NOT NULL,
+productInfo varchar(255) NULL,
+productReview varchar(255) NULL,
+categoryId bigint(20) NOT NULL,
+vendorId bigint(20) NOT NULL,
+locationId bigint(20) NOT NULL,
+foreign key (locationId) references js_location_details(locationId),
+foreign key (categoryId) references js_category_details(categoryId),
+foreign key (vendorId) references js_vendor_details(vendorId),
+PRIMARY KEY (productId)
+);
+
+/* Cart Details Table*/
+create table js_cart_details(
+id varchar(255) NOT NULL,
+cartDetailsId BIGINT NOT NULL AUTO_INCREMENT,
+userId bigint(20) NOT NULL,
+productId bigint(20) NOT NULL,
+foreign key (userId) references js_user_details(userId),
+foreign key (productId) references js_product_details(productId),
+PRIMARY KEY (cartDetailsId)
+);
+
+/* WishList Details Table*/
+create table js_wishlist_details(
+id varchar(255) NOT NULL,
+wishlistDetailsId BIGINT NOT NULL AUTO_INCREMENT,
+userId bigint(20) NOT NULL,
+productId bigint(20) NOT NULL,
+foreign key (userId) references js_user_details(userId),
+foreign key (productId) references js_product_details(productId),
+PRIMARY KEY (wishlistDetailsId)
+);
+
+/* Notification Details Table*/
+create table js_notification_details(
+id varchar(255) NOT NULL,
+notificationId BIGINT NOT NULL AUTO_INCREMENT,
+notificationMessage varchar(255) NOT NULL, 
+PRIMARY KEY (notificationId)
+);
+
+/* Offer Details Table*/
+create table js_offer_details(
+id varchar(255) NOT NULL,
+offerDetailsId BIGINT NOT NULL AUTO_INCREMENT, 
+offerPercentage varchar(255) NOT NULL,
+productId bigint(20) NOT NULL,
+foreign key (productId) references js_product_details(productId),
+PRIMARY KEY (offerDetailsId)
+);
+
+
+/* Payment Details Table*/
+create table js_payment_details(
+id varchar(255) NOT NULL,
+paymentDetailsId BIGINT NOT NULL AUTO_INCREMENT,
+paymentTypeName varchar(255) NOT NULL, 
+PRIMARY KEY (paymentDetailsId)
+);
+
+/* Beacon Details Table*/
+CREATE TABLE js_beacon_details (
+  id varchar(255) NOT NULL,
+  beaconId varchar(255) NOT NULL,
+  appId varchar(255) NOT NULL,
+  appToken varchar(255) NOT NULL,
+  locationId varchar(255) NOT NULL,
+  PRIMARY KEY (beaconId)
+);
+
+
+/* Transaction Details Table*/
+create table js_transaction_details(
+id varchar(255) NOT NULL,
+transactionId BIGINT NOT NULL AUTO_INCREMENT,
+transactionAmount varchar(255) NOT NULL, 
+transactionDate timestamp NOT NULL,
+quantity varchar(255) NOT NULL,
+qrCode varchar(255) NOT NULL,  
+userId bigint(20) NOT NULL,
+productId bigint(20) NOT NULL,
+paymentDetailsId bigint(20) NOT NULL,
+foreign key (paymentDetailsId) references js_payment_details(paymentDetailsId),
+foreign key (userId) references js_user_details(userId),
+foreign key (productId) references js_product_details(productId),
+PRIMARY KEY (transactionId)
+);
+
+/* Order Details Table*/
+create table js_order_details(
+id varchar(255) NOT NULL,
+orderId BIGINT NOT NULL AUTO_INCREMENT,
+orderAmount varchar(255) NOT NULL, 
+orderDate timestamp NOT NULL,
+quantity varchar(255) NOT NULL, 
+userId bigint(20) NOT NULL,
+productId bigint(20) NOT NULL,
+paymentDetailsId bigint(20) NOT NULL,
+foreign key (paymentDetailsId) references js_payment_details(paymentDetailsId),
+foreign key (userId) references js_user_details(userId),
+foreign key (productId) references js_product_details(productId),
+PRIMARY KEY (orderId)
+);
+
+
+
+
+
+
