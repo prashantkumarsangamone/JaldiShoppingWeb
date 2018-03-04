@@ -1,9 +1,6 @@
 package com.sangamone.jaldishopping.domain;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -16,7 +13,8 @@ public class VendorDetails extends BaseDomain{
 	
 	private Long vendorId;
 	private String vendorName;
-
+	
+	private String image;
 	
 
 	public Long getVendorId() {
@@ -58,6 +56,17 @@ public class VendorDetails extends BaseDomain{
 	@ManyToOne
 	@JoinColumn(name = "locationId", insertable = true, updatable = true, nullable = true)
 	private LocationDetails locationDetails;
+
+
+	public String getImage() {
+		return image;
+	}
+
+
+
+	public void setImage(String image) {
+		this.image = image;
+	}
 	
 	
 	

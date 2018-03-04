@@ -7,6 +7,8 @@ import com.sangamone.jaldishopping.domain.LocationDetails;
 
 public interface LocationDetailsRepository extends CrudRepository< LocationDetails, String> {
 
+	LocationDetails findByLocationId(Long locationId);
+
 
 
 }

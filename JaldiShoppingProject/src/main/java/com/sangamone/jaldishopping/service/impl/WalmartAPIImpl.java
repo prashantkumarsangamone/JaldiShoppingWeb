@@ -1,30 +1,28 @@
-/*package com.sangamone.jaldishopping.service.impl;
+package com.sangamone.jaldishopping.service.impl;
 
 
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.sangamone.mobilerecharge.controller.Response;
-import com.sangamone.mobilerecharge.domain.TransactionDetails;
-import com.sangamone.mobilerecharge.handler.RechargeHandler;
-import com.sangamone.mobilerecharge.repositories.TransactionDetailsRepository;
-import com.sangamone.mobilerecharge.service.RechargeRequestSender;
+import com.sangamone.jaldishopping.controller.Response;
+import com.sangamone.jaldishopping.domain.ProductDetails;
+import com.sangamone.jaldishopping.handler.WalmartAPIHandler;
+import com.sangamone.jaldishopping.services.WalmartAPIRequestSender;
 
 
 
 @Component(value = "rechargeRequestSender")
-public class WalmartAPIImpl implements RechargeRequestSender {
+public class WalmartAPIImpl implements WalmartAPIRequestSender {
 
 	@Autowired
-	private RechargeHandler rechargeHandler;
+	private WalmartAPIHandler walmartAPIHandler;
 	
 
-	public Response sendRequest(TransactionDetails transactionDetails) {
+	public Response sendRequest(ProductDetails productDetails) {
 		try {
 			
-			Response response = rechargeHandler.sendRequest(transactionDetails.getMobileNumber(),transactionDetails.getOperatorId(),
-					transactionDetails.getRechargeAmount(),transactionDetails.getUniqueId());
+			Response response = walmartAPIHandler.sendRequest(productDetails.getProductId());
 			return response;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -37,4 +35,3 @@ public class WalmartAPIImpl implements RechargeRequestSender {
 	
 }
 
-*/

@@ -158,6 +158,7 @@ text-align:center;
 		</li> --%>
 				
 	<li class='last'><a href="<%=request.getContextPath()%>/admin/home"><span class="glyphicon glyphicon-home"></span> Home</a></li>
+	<li class='last'><a href="<%=request.getContextPath()%>/admin/getURLInput"><span class="glyphicon glyphicon-task"></span> URLInput</a></li>
 	<li class='last'><a href="<%=request.getContextPath()%>/admin/logout"><span	class="glyphicon glyphicon-log-out"></span> Logout</a></li>
 	
 	</sec:authorize>

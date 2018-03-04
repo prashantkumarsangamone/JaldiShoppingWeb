@@ -7,6 +7,8 @@ import com.sangamone.jaldishopping.domain.VendorDetails;
 
 public interface VendorDetailsRepository  extends CrudRepository<VendorDetails, String> {
 
+	VendorDetails findByVendorId(Long vendorId);
+
 
 
 

@@ -12,10 +12,7 @@ import java.text.MessageFormat;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.sangamone.jaldishopping.controller.Response;
-import com.sangamone.jaldishopping.domain.TransactionDetails;
 import com.sangamone.jaldishopping.repositories.ProductDetailsRepository;
-import com.sangamone.jaldishopping.repositories.TransactionDetailsRepository;
-import com.sangamone.jaldishopping.service.impl.AdminServiceImpl;
 import com.sangamone.jaldishopping.utils.XmlParser;
 
 
@@ -69,13 +66,12 @@ try {
 				
 			}
 			
-
 			dataStreamFromUrl.close();
 			
 			Response response = XmlParser.parse(dataFromUrl);
 			
 			
-			/*System.out.println("response:::"+xMLResponse.row.get(0).getRequestOpeartor());*/
+		/*	System.out.println("response:::"+xMLResponse.row.get(0).getItemId());*/
 			return response;
 			
 		} catch (IOException e) {

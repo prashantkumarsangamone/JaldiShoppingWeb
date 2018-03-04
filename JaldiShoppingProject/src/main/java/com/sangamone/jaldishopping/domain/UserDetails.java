@@ -3,10 +3,6 @@ package com.sangamone.jaldishopping.domain;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-
 @Entity
 @Table(name = "js_user_details")
 public class UserDetails extends BaseDomain{

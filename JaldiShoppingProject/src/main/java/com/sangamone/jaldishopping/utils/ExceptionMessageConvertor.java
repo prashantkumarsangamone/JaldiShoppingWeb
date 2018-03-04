@@ -5,8 +5,6 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
-import com.sangamone.jaldishopping.exception.JaldiShoppingBaseException;
-import com.sangamone.jaldishopping.exception.TechnicalException;
 
 
 @Component

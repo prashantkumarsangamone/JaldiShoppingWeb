@@ -7,7 +7,7 @@ import javax.xml.transform.stream.StreamSource;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 
 import com.sangamone.jaldishopping.controller.Response;
-import com.sangamone.jaldishopping.controller.Row;
+import com.sangamone.jaldishopping.controller.Item;
 
 
 
@@ -18,14 +18,14 @@ public class XmlParser {
 		xml = "<Response>" + xml + "</Response>";
 
 		Jaxb2Marshaller marshaller = new Jaxb2Marshaller();
-		Class[] bound = { Response.class, Row.class };
+		Class[] bound = { Response.class, Item.class };
 		marshaller.setClassesToBeBound(bound);
 		Source source = new StreamSource(new StringReader(xml));
 
 		Response xMLResponse = (Response) marshaller.unmarshal(source);
 
-	   /*System.out.println("xmlresponse:::"+xMLResponse.row.get(0).getRequestOpeartor());
-		*/
+	   System.out.println("xmlresponse:::"+xMLResponse.item.get(0).getItemId());
+		
 		
 		return xMLResponse;
 

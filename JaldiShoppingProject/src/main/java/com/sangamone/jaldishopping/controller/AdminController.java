@@ -5,22 +5,23 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import com.sangamone.jaldishopping.constants.Constants;
+import com.sangamone.jaldishopping.domain.ProductDetails;
 import com.sangamone.jaldishopping.domain.UserDetails;
 import com.sangamone.jaldishopping.domain.VendorDetails;
+import com.sangamone.jaldishopping.repositories.VendorDetailsRepository;
 import com.sangamone.jaldishopping.services.AdminService;
 import com.sangamone.jaldishopping.utils.ExceptionMessageConvertor;
 
 
-@Controller
+@RestController()
 @RequestMapping("/admin")
 public class AdminController {
 	
@@ -29,6 +30,9 @@ public class AdminController {
 	
 	@Autowired
 	private ExceptionMessageConvertor exceptionMessageConvertor;
+	
+	@Autowired
+	private VendorDetailsRepository vendorDetailsRepository;
 	
 	
 	@RequestMapping(value = { "/", "/login" }, method = RequestMethod.GET)
@@ -109,13 +113,13 @@ public class AdminController {
 		JaldiShoppingResponse jaldiShoppingResponse;
 		try {
 			UserDetails userDetails = adminService.validateLogin(userEmail, userPassword);
-
-			jaldiShoppingResponse = prepareResponse(null, userDetails);
+			List<VendorDetails> vendorDetails=getVendorList();
+			jaldiShoppingResponse = prepareResponse(null, userDetails,vendorDetails);
 		} catch (Exception e) {
 
 			e.printStackTrace();
 
-			jaldiShoppingResponse = prepareResponse(e, null);
+			jaldiShoppingResponse = prepareResponse(e, null, null);
 
 		}
 
@@ -123,19 +127,31 @@ public class AdminController {
 
 	}
 	
-	private JaldiShoppingResponse prepareResponse(Exception e, UserDetails userDetails) {
+
+
+	private List<VendorDetails> getVendorList() {
+		// TODO Auto-generated method stub
+		return (List<VendorDetails>) vendorDetailsRepository.findAll();
+	}
+
+
+
+	private JaldiShoppingResponse prepareResponse(Exception e, UserDetails userDetails, List<VendorDetails> vendorDetails) {
 
 		JaldiShoppingResponse jaldiShoppingResponse = new JaldiShoppingResponse();
+		
+		
 
 		if (e == null) {
-
+			
+			
 			jaldiShoppingResponse.setResponseCode(Constants.SUCCESS_RESPONSE_CODE);
 
 			jaldiShoppingResponse.setDescription(Constants.SUCCESS_RESPONSE_MESSAGE);
 			
-			/*jaldiShoppingResponse.setVendorId(vendorDetails.getVendorId());
-
-			jaldiShoppingResponse.setVendorName(vendorDetails.getVendorName());*/
+			jaldiShoppingResponse.setVendorDetails(vendorDetails);
+			
+			
 		
 		} else {
 
@@ -162,63 +178,55 @@ public class AdminController {
 				
 				adminService.addUsers(firstName,lastName,userEmail,userMobile,zipCode);
 			
-
-			jaldiShoppingResponse = prepareResponse(null, userDetails);
+				List<VendorDetails> vendorDetails=getVendorList();
+			jaldiShoppingResponse = prepareResponse(null, userDetails, vendorDetails);
 			
 		} catch (Exception e) {
 
 			e.printStackTrace();
 
-			jaldiShoppingResponse = prepareResponse(e, null);
+			jaldiShoppingResponse = prepareResponse(e, null, null);
 
 		}
 
 		return jaldiShoppingResponse;
 
 	}
+
 	
 	
-	/*@RequestMapping(value = "/getProductList/{merchantCode}", method = RequestMethod.GET, produces = "application/json; charset=UTF-8")
-	@ResponseBody
+	
 
-	public BillSangamResponse getProductList(@RequestBody @PathVariable String merchantCode) {
-		List<ProductDetails> productdetailsList = null;
-		BillSangamResponse billSangamResponse;
+	@RequestMapping(value = "/getURLInput", method = RequestMethod.GET)
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_SUPER_ADMIN')")
+	public ModelAndView getURLInput() {
 
-		try {
-			System.out.println(merchantCode);
-			merchantDetailsService.validateMerchantCode(merchantCode);
-			try {
-				productdetailsList = merchantDetailsService.getProductDetailsbyMerchantCode(merchantCode);
-				billSangamResponse = responseProductList(null, productdetailsList);
-			} catch (Exception e) {
-				e.printStackTrace();
-				billSangamResponse = responseProductList(e, null);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			billSangamResponse = perpareResponseMerchant(e, null);
+		ModelAndView model = new ModelAndView();
 
-		}
-		return billSangamResponse;
+		model.setViewName("reports/URLInput");
+
+		return model;
 
 	}
 
-	private BillSangamResponse responseProductList(Exception e, List<ProductDetails> productdetailsList) {
+	@RequestMapping(value = "/getURLInputDetails", method = RequestMethod.POST ,produces = "application/json; charset=UTF-8")
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_SUPER_ADMIN')")
+	public ModelAndView getURLInputDetails(Principal principal,
+			@RequestParam(value = "productId", required = false) Long productId,
+			@RequestParam(value = "categoryId", required = false) Long categoryId,
+			@RequestParam(value = "vendorId", required = false) Long vendorId,
+			@RequestParam(value = "locationId", required = false) Long locationId) {
 
-		BillSangamResponse billSangamResponse = new BillSangamResponse();
+		ModelAndView model = new ModelAndView();
+		ProductDetails productDetails = 
+				adminService.addProductDetails(productId,categoryId,vendorId,locationId);
+		
+	
+		model.setViewName("reports/URLInput");
 
-		if (e == null) {
+		return model;
 
-			billSangamResponse.setProductList(productdetailsList);
+	}
 
-		} else {
-			billSangamResponse.setResponseCode(exceptionMessageConvertor.getCode(e));
-			billSangamResponse.setDescription(exceptionMessageConvertor.getMessage(e));
-
-		}
-
-		return billSangamResponse;
-	}*/
 	
 }

@@ -1,7 +1,7 @@
 package com.sangamone.jaldishopping.services;
 
+import com.sangamone.jaldishopping.domain.ProductDetails;
 import com.sangamone.jaldishopping.domain.UserDetails;
-import com.sangamone.jaldishopping.exception.JaldiShoppingBaseException;
 
 public interface AdminService {
 
@@ -13,6 +13,10 @@ public interface AdminService {
 			String zipCode);
 
 	UserDetails validateLogin(String userEmail, String userPassword);
+
+	ProductDetails addProductDetails(Long productId, Long categoryId, Long vendorId, Long locationId);
+
+
 
 	
 }
