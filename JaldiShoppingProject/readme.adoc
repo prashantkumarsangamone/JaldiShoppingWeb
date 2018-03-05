@@ -1,0 +1,6 @@
+
+JaldiShopping
+
+Install: Java, Tomcat 7
+
+Clone: https://github.com/rupadhya/JaldiShoppingWeb.git
