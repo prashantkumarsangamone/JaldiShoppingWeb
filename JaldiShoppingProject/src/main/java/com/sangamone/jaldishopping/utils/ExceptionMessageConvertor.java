@@ -5,6 +5,10 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
+import com.sangamone.jaldishopping.exception.JaldiShoppingBaseException;
+import com.sangamone.jaldishopping.exception.TechnicalException;
+
+
 
 
 @Component
@@ -14,7 +18,7 @@ public class ExceptionMessageConvertor {
 	@Autowired
 	Environment env;
 
-	/*public String getCode(Exception e) {
+	public String getCode(Exception e) {
 		if (!(e instanceof JaldiShoppingBaseException)) {
 
 			e = new TechnicalException();
@@ -29,6 +33,6 @@ public class ExceptionMessageConvertor {
 			e = new TechnicalException();
 		}
 		return env.getProperty(e.getClass().getName() + ".message");
-	}*/
+	}
 
 }

@@ -20,7 +20,33 @@ public class ProductDetails extends BaseDomain{
 	private String productQuantity;
 	private String productInfo;
 	private String productReview;
-	
+	private Long vendorId;
+	private Long categoryId;
+	private Long locationId;
+
+	public Long getVendorId() {
+		return vendorId;
+	}
+
+	public void setVendorId(Long vendorId) {
+		this.vendorId = vendorId;
+	}
+
+	public Long getCategoryId() {
+		return categoryId;
+	}
+
+	public void setCategoryId(Long categoryId) {
+		this.categoryId = categoryId;
+	}
+
+	public Long getLocationId() {
+		return locationId;
+	}
+
+	public void setLocationId(Long locationId) {
+		this.locationId = locationId;
+	}
 
 	public Long getProductId() {
 		return productId;
@@ -111,18 +137,16 @@ public class ProductDetails extends BaseDomain{
 	}
 
 	@ManyToOne
-	@JoinColumn(name = "locationId", insertable = true, updatable = true, nullable = true)
+	@JoinColumn(name = "locationId", insertable = false, updatable = false, nullable = false)
 	private LocationDetails locationDetails;
 	
 	@ManyToOne
-	@JoinColumn(name = "categoryId", insertable = true, updatable = true, nullable = true)
+	@JoinColumn(name = "categoryId", insertable = false, updatable = false, nullable = false)
 	private CategoryDetails categoryDetails;
 	
 	@ManyToOne
-	@JoinColumn(name = "vendorId", insertable = true, updatable = true, nullable = true)
+	@JoinColumn(name = "vendorId", insertable = false, updatable = false, nullable = false)
 	private VendorDetails vendorDetails;
 	
-	
-
 }
 

@@ -8,6 +8,8 @@ public interface WalmartAPIHandler {
 
 	public Response sendRequest(Long publisherId);
 
+	public Response sendRequest1(Long productId);
+
 	
 
 }

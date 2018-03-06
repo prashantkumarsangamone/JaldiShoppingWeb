@@ -32,6 +32,21 @@ public class WalmartAPIImpl implements WalmartAPIRequestSender {
 		
 		
 	}
-	
+
+
+	@Override
+	public Response sendRequest1(Long productId) {
+try {
+			
+			Response response = walmartAPIHandler.sendRequest1(productId);
+			return response;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		
+		}
+	}
+
+
 }
 

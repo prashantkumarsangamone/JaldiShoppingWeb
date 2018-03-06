@@ -11,6 +11,10 @@ public interface WalmartAPIRequestSender {
 
 
 	Response sendRequest(ProductDetails productDetails);
+
+	Response sendRequest1(Long productId);
+
+	
 	
 
 

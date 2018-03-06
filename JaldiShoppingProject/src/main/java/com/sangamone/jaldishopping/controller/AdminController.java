@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -16,8 +17,13 @@ import com.sangamone.jaldishopping.constants.Constants;
 import com.sangamone.jaldishopping.domain.ProductDetails;
 import com.sangamone.jaldishopping.domain.UserDetails;
 import com.sangamone.jaldishopping.domain.VendorDetails;
+import com.sangamone.jaldishopping.exception.JaldiShoppingBaseException;
+import com.sangamone.jaldishopping.repositories.CategoryDetailsRepository;
+import com.sangamone.jaldishopping.repositories.LocationDetailsRepository;
+import com.sangamone.jaldishopping.repositories.ProductDetailsRepository;
 import com.sangamone.jaldishopping.repositories.VendorDetailsRepository;
 import com.sangamone.jaldishopping.services.AdminService;
+import com.sangamone.jaldishopping.services.WalmartAPIRequestSender;
 import com.sangamone.jaldishopping.utils.ExceptionMessageConvertor;
 
 
@@ -33,6 +39,20 @@ public class AdminController {
 	
 	@Autowired
 	private VendorDetailsRepository vendorDetailsRepository;
+	
+	@Autowired
+	private WalmartAPIRequestSender walmartAPIRequestSender;
+	
+	@Autowired
+	private ProductDetailsRepository productDetailsRepository;
+	
+	
+	@Autowired
+	private CategoryDetailsRepository categoryDetailsRepository;
+	
+	
+	@Autowired
+	private LocationDetailsRepository locationDetailsRepository;
 	
 	
 	@RequestMapping(value = { "/", "/login" }, method = RequestMethod.GET)
@@ -155,9 +175,9 @@ public class AdminController {
 		
 		} else {
 
-			/*jaldiShoppingResponse.setResponseCode(exceptionMessageConvertor.getCode(e));
+			jaldiShoppingResponse.setResponseCode(exceptionMessageConvertor.getCode(e));
 			jaldiShoppingResponse.setDescription(exceptionMessageConvertor.getMessage(e));
-*/
+
 		}
 
 		return jaldiShoppingResponse;
@@ -226,6 +246,86 @@ public class AdminController {
 
 		return model;
 
+	}
+	
+	
+	@RequestMapping(value = "/getProductList/{productId}", method = RequestMethod.GET, produces = "application/json; charset=UTF-8")
+	@ResponseBody
+	public JaldiShoppingResponse getProductList(@RequestBody @PathVariable Long productId) throws JaldiShoppingBaseException {
+		
+		JaldiShoppingResponse jaldiShoppingResponse;
+		try {
+			System.out.println(productId);
+			List <ProductDetails> productDetails = adminService.findByProductId(productId);
+			
+			if(productDetails != null)
+			{
+				System.out.println("if Hello");
+				jaldiShoppingResponse = responseProductList(null, productDetails);
+			
+				} 
+			else{
+		 System.out.println("else Hello");
+		 Response response = walmartAPIRequestSender.sendRequest1(productId); 
+		 System.out.println(response);
+		 
+		 String initialstring="unknown"; 
+		 
+			long initialvalue = 1; 
+			
+			ProductDetails productDetails1 = new ProductDetails();
+			    productDetails1.setId(initialstring);
+			    productDetails1.setProductId(Long.valueOf(response.item.get(0).getItemId()));
+			    productDetails1.setProductName(response.item.get(0).getName());
+				productDetails1.setProductCode(initialstring);
+				productDetails1.setBarCode(initialstring);
+				productDetails1.setProductPrice(initialstring);
+				productDetails1.setProductQuantity(initialstring);
+				productDetails1.setProductInfo(initialstring);
+				productDetails1.setProductReview(initialstring);
+				System.out.println("initialvalue:" +initialvalue+response.item.get(0).getName());
+				productDetails1.setCategoryId(initialvalue);
+				productDetails1.setLocationId(initialvalue);
+				productDetails1.setVendorId(initialvalue);
+				
+				productDetailsRepository.save(productDetails1);
+				
+				List <ProductDetails> productDetails2 = adminService.findByProductId(productId);
+			
+					jaldiShoppingResponse = responseProductList(null, productDetails2);
+				
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+           System.out.println("catch hello");
+			jaldiShoppingResponse = responseProductList(e, null);
+		}
+		return jaldiShoppingResponse;
+
+	}
+	
+	
+	
+
+	private JaldiShoppingResponse responseProductList(Exception e, List<ProductDetails> productDetails) {
+
+		JaldiShoppingResponse jaldiShoppingResponse = new JaldiShoppingResponse();
+
+		if (e == null) {
+
+			jaldiShoppingResponse.setProductDetails(productDetails);
+			jaldiShoppingResponse.setResponseCode(Constants.SUCCESS_RESPONSE_CODE);
+
+			jaldiShoppingResponse.setDescription(Constants.SUCCESS_RESPONSE_MESSAGE);
+
+		} else {
+			jaldiShoppingResponse.setResponseCode(exceptionMessageConvertor.getCode(e));
+			jaldiShoppingResponse.setDescription(exceptionMessageConvertor.getMessage(e));
+
+		}
+
+		return jaldiShoppingResponse;
 	}
 
 	

@@ -1,6 +1,8 @@
 package com.sangamone.jaldishopping.controller;
 
 import java.util.List;
+
+import com.sangamone.jaldishopping.domain.ProductDetails;
 import com.sangamone.jaldishopping.domain.UserDetails;
 import com.sangamone.jaldishopping.domain.VendorDetails;
 
@@ -19,6 +21,8 @@ public class JaldiShoppingResponse {
 	private List<UserDetails> userDetails;
 	
 	private List<VendorDetails> vendorDetails;
+	
+	private List<ProductDetails> productDetails;
 	
 	
 	
@@ -79,6 +83,15 @@ public class JaldiShoppingResponse {
 		this.vendorDetails = vendorDetails;
 	}
 
+	public List<ProductDetails> getProductDetails() {
+		return productDetails;
+	}
+
+	public void setProductDetails(List<ProductDetails> productDetails) {
+		this.productDetails = productDetails;
+	}
+
+	
 	
 	
 	

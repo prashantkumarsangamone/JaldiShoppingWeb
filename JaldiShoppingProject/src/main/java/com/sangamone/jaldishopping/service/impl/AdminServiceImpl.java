@@ -1,15 +1,19 @@
 package com.sangamone.jaldishopping.service.impl;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.sangamone.jaldishopping.controller.JaldiShoppingResponse;
 import com.sangamone.jaldishopping.controller.Response;
 import com.sangamone.jaldishopping.domain.AuthorityDetails;
 import com.sangamone.jaldishopping.domain.CategoryDetails;
 import com.sangamone.jaldishopping.domain.ProductDetails;
 import com.sangamone.jaldishopping.domain.UserDetails;
+import com.sangamone.jaldishopping.exception.InvalidProductCodeException;
+import com.sangamone.jaldishopping.exception.JaldiShoppingBaseException;
 import com.sangamone.jaldishopping.repositories.AuthorityDetailsRepository;
 import com.sangamone.jaldishopping.repositories.CategoryDetailsRepository;
 import com.sangamone.jaldishopping.repositories.LocationDetailsRepository;
@@ -131,6 +135,8 @@ public class AdminServiceImpl implements AdminService
 					productDetailsRepository.save(productDetails);
 
 					productDetails.setProductName(response.item.get(0).getName());
+					productDetails.setProductPrice(response.item.get(0).getSalePrice());
+					
 					
 					
 					productDetailsRepository.save(productDetails);
@@ -139,10 +145,16 @@ public class AdminServiceImpl implements AdminService
 				 return productDetails;
 	}
 	
-	
-
+	public List<ProductDetails> findByProductId(Long productId) throws JaldiShoppingBaseException {
+		 
 
 		
+		return (List<ProductDetails>) productDetailsRepository.findByProductId(productId);
+	}
+	
+	
+	
+	
 	
 
 	

@@ -86,6 +86,55 @@ try {
 
 
 
+
+
+	@Override
+	public Response sendRequest1(Long productId) {
+try {
+			
+			
+			String smsGatewayUrl = MessageFormat.format(requestUrl,
+
+					URLEncoder.encode(apiKey, "UTF8"),
+					URLEncoder.encode(String.valueOf(productId), "UTF8"));
+					
+					
+
+			URL sendUrl = new URL(smsGatewayUrl);
+
+			HttpURLConnection httpConnection = (HttpURLConnection) sendUrl.openConnection();
+			httpConnection.setRequestMethod("GET");
+
+			BufferedReader dataStreamFromUrl = new BufferedReader(
+					new InputStreamReader(httpConnection.getInputStream()));
+			String dataFromUrl = "", dataBuffer = "";
+
+			while ((dataBuffer = dataStreamFromUrl.readLine()) != null) {
+				dataFromUrl += dataBuffer;
+
+				System.out.println("Response: " + dataFromUrl);
+				
+			}
+			
+			dataStreamFromUrl.close();
+			
+			Response response = XmlParser.parse(dataFromUrl);
+			
+			
+		/*	System.out.println("response:::"+xMLResponse.row.get(0).getItemId());*/
+			return response;
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+			
+		}
+
+	}
+
+
+
 }
 
 
