@@ -78,6 +78,7 @@
 	<bean id="WalmartAPIHandler" class="com.sangamone.jaldishopping.handler.WalmartAPIHandlerImpl">
 
 		<property name="requestUrl" value="${walmart.host}" />
+		<property name="requestUrl1" value="${walmart.host1}" />
 
 	</bean>
 

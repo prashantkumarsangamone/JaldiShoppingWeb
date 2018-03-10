@@ -17,6 +17,8 @@ public class Messages {
 
 	public static final String EMAIL_SUBJECT = "EMAIL_SUBJECT";
 	
+	public static final String API_KEY = "API_KEY";
+	
 	public String getMessage(String key) {
 		return environment.getProperty(key);
 

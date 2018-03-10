@@ -2,7 +2,6 @@ package com.sangamone.jaldishopping.controller;
 
 import java.security.Principal;
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,19 +39,7 @@ public class AdminController {
 	@Autowired
 	private VendorDetailsRepository vendorDetailsRepository;
 	
-	@Autowired
-	private WalmartAPIRequestSender walmartAPIRequestSender;
-	
-	@Autowired
-	private ProductDetailsRepository productDetailsRepository;
-	
-	
-	@Autowired
-	private CategoryDetailsRepository categoryDetailsRepository;
-	
-	
-	@Autowired
-	private LocationDetailsRepository locationDetailsRepository;
+
 	
 	
 	@RequestMapping(value = { "/", "/login" }, method = RequestMethod.GET)
@@ -258,53 +245,33 @@ public class AdminController {
 			System.out.println(productId);
 			List <ProductDetails> productDetails = adminService.findByProductId(productId);
 			
-			if(productDetails != null)
+			if(productDetails.isEmpty())
 			{
-				System.out.println("if Hello");
-				jaldiShoppingResponse = responseProductList(null, productDetails);
 			
-				} 
+			 ProductDetails productDetails2 = 
+						adminService.addProductDetails(productId);
+			
+					
+					List <ProductDetails> productDetails3 = adminService.findByProductId(productId);
+				
+						jaldiShoppingResponse = responseProductList(null, productDetails3);
+				}
+				
+				
 			else{
-		 System.out.println("else Hello");
-		 Response response = walmartAPIRequestSender.sendRequest1(productId); 
-		 System.out.println(response);
+				
+				jaldiShoppingResponse = responseProductList(null, productDetails);
 		 
-		 String initialstring="unknown"; 
-		 
-			long initialvalue = 1; 
-			
-			ProductDetails productDetails1 = new ProductDetails();
-			    productDetails1.setId(initialstring);
-			    productDetails1.setProductId(Long.valueOf(response.item.get(0).getItemId()));
-			    productDetails1.setProductName(response.item.get(0).getName());
-				productDetails1.setProductCode(initialstring);
-				productDetails1.setBarCode(initialstring);
-				productDetails1.setProductPrice(initialstring);
-				productDetails1.setProductQuantity(initialstring);
-				productDetails1.setProductInfo(initialstring);
-				productDetails1.setProductReview(initialstring);
-				System.out.println("initialvalue:" +initialvalue+response.item.get(0).getName());
-				productDetails1.setCategoryId(initialvalue);
-				productDetails1.setLocationId(initialvalue);
-				productDetails1.setVendorId(initialvalue);
-				
-				productDetailsRepository.save(productDetails1);
-				
-				List <ProductDetails> productDetails2 = adminService.findByProductId(productId);
-			
-					jaldiShoppingResponse = responseProductList(null, productDetails2);
-				
 			}
-			
 		} catch (Exception e) {
 			e.printStackTrace();
-           System.out.println("catch hello");
 			jaldiShoppingResponse = responseProductList(e, null);
 		}
 		return jaldiShoppingResponse;
 
 	}
 	
+
 	
 	
 
@@ -327,6 +294,42 @@ public class AdminController {
 
 		return jaldiShoppingResponse;
 	}
-
 	
+	
+	@RequestMapping(value = "/getProductList/{UPCCode}", method = RequestMethod.GET, produces = "application/json; charset=UTF-8")
+	@ResponseBody
+	public JaldiShoppingResponse getProductListByUPC(@RequestBody @PathVariable String barCode) throws JaldiShoppingBaseException {
+		
+		JaldiShoppingResponse jaldiShoppingResponse;
+		try {
+			System.out.println(barCode);
+			List <ProductDetails> productDetails = adminService.findByBarCode(barCode);
+			
+			if(productDetails!=null)
+			//if(productDetails.isEmpty())
+			{
+			
+			 ProductDetails productDetails2 = 
+						adminService.addProductDetails(barCode);
+			
+					
+					List <ProductDetails> productDetails3 = adminService.findByBarCode(barCode);
+				
+						jaldiShoppingResponse = responseProductList(null, productDetails3);
+				}
+				
+				
+			else{
+				
+				jaldiShoppingResponse = responseProductList(null, productDetails);
+		 
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			jaldiShoppingResponse = responseProductList(e, null);
+		}
+		return jaldiShoppingResponse;
+
+	}
+
 }

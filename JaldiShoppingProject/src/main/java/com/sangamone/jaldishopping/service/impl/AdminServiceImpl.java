@@ -1,18 +1,15 @@
 package com.sangamone.jaldishopping.service.impl;
 
-import java.sql.Timestamp;
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.sangamone.jaldishopping.controller.JaldiShoppingResponse;
 import com.sangamone.jaldishopping.controller.Response;
 import com.sangamone.jaldishopping.domain.AuthorityDetails;
-import com.sangamone.jaldishopping.domain.CategoryDetails;
 import com.sangamone.jaldishopping.domain.ProductDetails;
 import com.sangamone.jaldishopping.domain.UserDetails;
-import com.sangamone.jaldishopping.exception.InvalidProductCodeException;
 import com.sangamone.jaldishopping.exception.JaldiShoppingBaseException;
 import com.sangamone.jaldishopping.repositories.AuthorityDetailsRepository;
 import com.sangamone.jaldishopping.repositories.CategoryDetailsRepository;
@@ -150,6 +147,65 @@ public class AdminServiceImpl implements AdminService
 
 		
 		return (List<ProductDetails>) productDetailsRepository.findByProductId(productId);
+	}
+
+	@Override
+	public ProductDetails addProductDetails(Long productId) {
+		 String initialstring="unknown"; 
+		 
+			long initialvalue = 1; 
+			 Response response = walmartAPIRequestSender.sendRequest1(productId);
+			 System.out.println(response);
+			ProductDetails productDetails1 = new ProductDetails();
+			    productDetails1.setId(initialstring);
+			    productDetails1.setProductId(Long.valueOf(response.item.get(0).getItemId()));
+			    productDetails1.setProductName(response.item.get(0).getName());
+				productDetails1.setProductCode(initialstring);
+				productDetails1.setBarCode(initialstring);
+				productDetails1.setProductPrice(initialstring);
+				productDetails1.setProductQuantity(initialstring);
+				productDetails1.setProductInfo(initialstring);
+				productDetails1.setProductReview(initialstring);
+				System.out.println("initialvalue:" +initialvalue+response.item.get(0).getName());
+				productDetails1.setCategoryId(initialvalue);
+				productDetails1.setLocationId(initialvalue);
+				productDetails1.setVendorId(initialvalue);
+				
+				productDetailsRepository.save(productDetails1);
+				return productDetails1;
+	}
+	
+	@Override
+	public List<ProductDetails> findByBarCode(String barCode) throws JaldiShoppingBaseException {
+	
+			
+			return (List<ProductDetails>) productDetailsRepository.findByBarCode(barCode);
+		
+	}
+	@Override
+	public ProductDetails addProductDetails(String barCode) {
+		String initialstring="unknown"; 
+		 
+		long initialvalue = 1; 
+		 Response response = walmartAPIRequestSender.sendRequest2(barCode);
+		 System.out.println(response);
+		ProductDetails productDetails1 = new ProductDetails();
+		    productDetails1.setId(initialstring);
+		    productDetails1.setProductId(Long.valueOf(response.item.get(0).getItemId()));
+		    productDetails1.setProductName(response.item.get(0).getName());
+			productDetails1.setProductCode(initialstring);
+			productDetails1.setBarCode(initialstring);
+			productDetails1.setProductPrice(initialstring);
+			productDetails1.setProductQuantity(initialstring);
+			productDetails1.setProductInfo(initialstring);
+			productDetails1.setProductReview(initialstring);
+			System.out.println("initialvalue:" +initialvalue+response.item.get(0).getName());
+			productDetails1.setCategoryId(initialvalue);
+			productDetails1.setLocationId(initialvalue);
+			productDetails1.setVendorId(initialvalue);
+			
+			productDetailsRepository.save(productDetails1);
+			return productDetails1;
 	}
 	
 	

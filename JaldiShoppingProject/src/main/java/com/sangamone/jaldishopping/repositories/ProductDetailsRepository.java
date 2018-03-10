@@ -12,6 +12,8 @@ public interface ProductDetailsRepository  extends CrudRepository<ProductDetails
 
 	List<ProductDetails> findByProductId(Long productId);
 
+	List<ProductDetails> findByBarCode(String barCode);
+
 	
 
 

@@ -22,6 +22,12 @@ public interface AdminService {
 
 	List<ProductDetails> findByProductId(Long productId) throws JaldiShoppingBaseException;
 
+	ProductDetails addProductDetails(Long productId);
+
+	List<ProductDetails> findByBarCode(String barCode) throws JaldiShoppingBaseException;
+
+	ProductDetails addProductDetails(String barCode);
+
 
 
 

@@ -48,5 +48,19 @@ try {
 	}
 
 
+	@Override
+	public Response sendRequest2(String barCode) {
+try {
+			
+			Response response = walmartAPIHandler.sendRequest2(barCode);
+			return response;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		
+		}
+	}
+
+
 }
 

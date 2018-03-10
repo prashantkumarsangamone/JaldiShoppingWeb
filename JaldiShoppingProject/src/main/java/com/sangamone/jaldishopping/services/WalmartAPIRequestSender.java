@@ -14,6 +14,8 @@ public interface WalmartAPIRequestSender {
 
 	Response sendRequest1(Long productId);
 
+	Response sendRequest2(String barCode);
+
 	
 	
 

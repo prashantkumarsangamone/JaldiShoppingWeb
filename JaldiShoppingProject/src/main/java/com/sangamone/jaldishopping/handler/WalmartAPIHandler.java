@@ -10,6 +10,8 @@ public interface WalmartAPIHandler {
 
 	public Response sendRequest1(Long productId);
 
+	public Response sendRequest2(String barCode);
+
 	
 
 }
