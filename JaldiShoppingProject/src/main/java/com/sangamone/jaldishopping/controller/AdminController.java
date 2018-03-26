@@ -17,12 +17,8 @@ import com.sangamone.jaldishopping.domain.ProductDetails;
 import com.sangamone.jaldishopping.domain.UserDetails;
 import com.sangamone.jaldishopping.domain.VendorDetails;
 import com.sangamone.jaldishopping.exception.JaldiShoppingBaseException;
-import com.sangamone.jaldishopping.repositories.CategoryDetailsRepository;
-import com.sangamone.jaldishopping.repositories.LocationDetailsRepository;
-import com.sangamone.jaldishopping.repositories.ProductDetailsRepository;
 import com.sangamone.jaldishopping.repositories.VendorDetailsRepository;
 import com.sangamone.jaldishopping.services.AdminService;
-import com.sangamone.jaldishopping.services.WalmartAPIRequestSender;
 import com.sangamone.jaldishopping.utils.ExceptionMessageConvertor;
 
 
@@ -296,21 +292,23 @@ public class AdminController {
 	}
 	
 	
-	@RequestMapping(value = "/getProductList/{UPCCode}", method = RequestMethod.GET, produces = "application/json; charset=UTF-8")
+	@RequestMapping(value = "/getProductListUPC/{barCode}", method = RequestMethod.GET, produces = "application/json; charset=UTF-8")
 	@ResponseBody
-	public JaldiShoppingResponse getProductListByUPC(@RequestBody @PathVariable String barCode) throws JaldiShoppingBaseException {
+	public JaldiShoppingResponse getProductListUPC(@RequestBody @PathVariable String barCode) throws JaldiShoppingBaseException {
+		
+		System.out.println("Inside Controller");
 		
 		JaldiShoppingResponse jaldiShoppingResponse;
 		try {
 			System.out.println(barCode);
 			List <ProductDetails> productDetails = adminService.findByBarCode(barCode);
 			
-			if(productDetails!=null)
-			//if(productDetails.isEmpty())
+			
+			if(productDetails.isEmpty())
 			{
 			
 			 ProductDetails productDetails2 = 
-						adminService.addProductDetails(barCode);
+						adminService.addProductDetails1(barCode);
 			
 					
 					List <ProductDetails> productDetails3 = adminService.findByBarCode(barCode);

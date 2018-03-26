@@ -21,11 +21,8 @@ public class XmlParser {
 		Class[] bound = { Response.class, Item.class };
 		marshaller.setClassesToBeBound(bound);
 		Source source = new StreamSource(new StringReader(xml));
-
+         
 		Response xMLResponse = (Response) marshaller.unmarshal(source);
-
-	   System.out.println("xmlresponse:::"+xMLResponse.item.get(0).getItemId());
-		
 		
 		return xMLResponse;
 

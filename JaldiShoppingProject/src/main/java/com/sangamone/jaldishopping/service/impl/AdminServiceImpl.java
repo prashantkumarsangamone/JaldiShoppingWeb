@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.sangamone.jaldishopping.controller.Items;
 import com.sangamone.jaldishopping.controller.Response;
 import com.sangamone.jaldishopping.domain.AuthorityDetails;
 import com.sangamone.jaldishopping.domain.ProductDetails;
@@ -151,7 +152,7 @@ public class AdminServiceImpl implements AdminService
 
 	@Override
 	public ProductDetails addProductDetails(Long productId) {
-		 String initialstring="unknown"; 
+		 String initialstring="null"; 
 		 
 			long initialvalue = 1; 
 			 Response response = walmartAPIRequestSender.sendRequest1(productId);
@@ -161,12 +162,11 @@ public class AdminServiceImpl implements AdminService
 			    productDetails1.setProductId(Long.valueOf(response.item.get(0).getItemId()));
 			    productDetails1.setProductName(response.item.get(0).getName());
 				productDetails1.setProductCode(initialstring);
-				productDetails1.setBarCode(initialstring);
-				productDetails1.setProductPrice(initialstring);
+				productDetails1.setBarCode(response.item.get(0).getUpc());
+				productDetails1.setProductPrice(response.item.get(0).getSalePrice());
 				productDetails1.setProductQuantity(initialstring);
-				productDetails1.setProductInfo(initialstring);
-				productDetails1.setProductReview(initialstring);
-				System.out.println("initialvalue:" +initialvalue+response.item.get(0).getName());
+				productDetails1.setProductInfo(response.item.get(0).getCategoryPath());
+				productDetails1.setProductReview(response.item.get(0).getNumReviews());
 				productDetails1.setCategoryId(initialvalue);
 				productDetails1.setLocationId(initialvalue);
 				productDetails1.setVendorId(initialvalue);
@@ -182,24 +182,31 @@ public class AdminServiceImpl implements AdminService
 			return (List<ProductDetails>) productDetailsRepository.findByBarCode(barCode);
 		
 	}
+	
 	@Override
-	public ProductDetails addProductDetails(String barCode) {
-		String initialstring="unknown"; 
+	public ProductDetails addProductDetails1(String barCode) {
+		String initialstring="null"; 
 		 
 		long initialvalue = 1; 
-		 Response response = walmartAPIRequestSender.sendRequest2(barCode);
-		 System.out.println(response);
+		 List<Items> items = walmartAPIRequestSender.sendRequest2(barCode);
+		
+		 System.out.println(items);
+		 for(int i=0;i<=items.size();i++){
+			 System.out.println("FreeShip"+items.get(0).getFreeShipToStore());
+		 }
+		 
 		ProductDetails productDetails1 = new ProductDetails();
 		    productDetails1.setId(initialstring);
-		    productDetails1.setProductId(Long.valueOf(response.item.get(0).getItemId()));
-		    productDetails1.setProductName(response.item.get(0).getName());
+		    productDetails1.setProductId(Long.valueOf(items.get(0).getItems().get(0).getItemId()));
+		    System.out.println("Product Id"+items.get(0).getItems().get(0).getItemId());
+		    productDetails1.setProductName(items.get(0).getItems().get(0).getName());
+		    System.out.println("Product Id"+items.get(0).getItems().get(0).getName());
 			productDetails1.setProductCode(initialstring);
-			productDetails1.setBarCode(initialstring);
-			productDetails1.setProductPrice(initialstring);
+			productDetails1.setBarCode(items.get(0).getItems().get(0).getUpc());
+			productDetails1.setProductPrice(items.get(0).getItems().get(0).getSalePrice());
 			productDetails1.setProductQuantity(initialstring);
-			productDetails1.setProductInfo(initialstring);
-			productDetails1.setProductReview(initialstring);
-			System.out.println("initialvalue:" +initialvalue+response.item.get(0).getName());
+			productDetails1.setProductInfo(items.get(0).getItems().get(0).getCategoryPath());
+			productDetails1.setProductReview(items.get(0).getItems().get(0).getNumReviews());
 			productDetails1.setCategoryId(initialvalue);
 			productDetails1.setLocationId(initialvalue);
 			productDetails1.setVendorId(initialvalue);
@@ -207,6 +214,7 @@ public class AdminServiceImpl implements AdminService
 			productDetailsRepository.save(productDetails1);
 			return productDetails1;
 	}
+	
 	
 	
 	

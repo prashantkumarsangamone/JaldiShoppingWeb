@@ -8,12 +8,16 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.text.MessageFormat;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.sangamone.jaldishopping.constants.Messages;
+import com.sangamone.jaldishopping.controller.Items;
 import com.sangamone.jaldishopping.controller.Response;
+
 import com.sangamone.jaldishopping.repositories.ProductDetailsRepository;
+import com.sangamone.jaldishopping.utils.JSONParser;
 import com.sangamone.jaldishopping.utils.XmlParser;
 
 
@@ -155,7 +159,7 @@ try {
 
 
 	@Override
-	public Response sendRequest2(String barCode) {
+	public List<Items> sendRequest2(String barCode) {
 try {
 			
 			
@@ -184,11 +188,11 @@ try {
 			
 			dataStreamFromUrl.close();
 			
-			Response response = XmlParser.parse(dataFromUrl);
+			List<Items> items = JSONParser.JSONparse(dataFromUrl);
 			
 			
 		/*	System.out.println("response:::"+xMLResponse.row.get(0).getItemId());*/
-			return response;
+			return items;
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

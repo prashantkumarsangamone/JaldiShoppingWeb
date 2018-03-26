@@ -3,13 +3,17 @@ package com.sangamone.jaldishopping.controller;
 
 public class Item {
 	
-	public String ItemId;
+public String ItemId;
 	
-	public String ParentItemId;
-	
+	public String parentItemId;
+
 	public String Name;
-	
+
+	public String Msrp;
+
 	public String SalePrice;
+	
+	public String Upc;
 	
 	public String CategoryPath;
 	
@@ -27,13 +31,39 @@ public class Item {
 	
 	public String ProductTrackingUrl;
 	
+	public String NinetySevenCentShipping;
+	
+	public String StandardShipRate;
+	
 	public String Size;
 	
 	public String Color;
 	
 	public String Marketplace;
 	
-	public String SellerInfo;
+	public String ShipToStore;
+	
+	public String FreeShipToStore;
+	
+	public String ModelNumber;
+	
+	public String ProductUrl;
+	
+	public String CustomerRating;
+	
+	public String NumReviews;
+	
+	public String CustomerRatingImage;
+	
+	public String CategoryNode;
+	
+	public String Bundle;
+	
+	public String Clearance;
+	
+	public String PreOrder;
+	
+	public String Stock;
 
 	public String getItemId() {
 		return ItemId;
@@ -44,11 +74,11 @@ public class Item {
 	}
 
 	public String getParentItemId() {
-		return ParentItemId;
+		return parentItemId;
 	}
 
 	public void setParentItemId(String parentItemId) {
-		ParentItemId = parentItemId;
+		this.parentItemId = parentItemId;
 	}
 
 	public String getName() {
@@ -59,12 +89,28 @@ public class Item {
 		Name = name;
 	}
 
+	public String getMsrp() {
+		return Msrp;
+	}
+
+	public void setMsrp(String msrp) {
+		Msrp = msrp;
+	}
+
 	public String getSalePrice() {
 		return SalePrice;
 	}
 
 	public void setSalePrice(String salePrice) {
 		SalePrice = salePrice;
+	}
+
+	public String getUpc() {
+		return Upc;
+	}
+
+	public void setUpc(String upc) {
+		Upc = upc;
 	}
 
 	public String getCategoryPath() {
@@ -131,6 +177,22 @@ public class Item {
 		ProductTrackingUrl = productTrackingUrl;
 	}
 
+	public String getNinetySevenCentShipping() {
+		return NinetySevenCentShipping;
+	}
+
+	public void setNinetySevenCentShipping(String ninetySevenCentShipping) {
+		NinetySevenCentShipping = ninetySevenCentShipping;
+	}
+
+	public String getStandardShipRate() {
+		return StandardShipRate;
+	}
+
+	public void setStandardShipRate(String standardShipRate) {
+		StandardShipRate = standardShipRate;
+	}
+
 	public String getSize() {
 		return Size;
 	}
@@ -155,15 +217,101 @@ public class Item {
 		Marketplace = marketplace;
 	}
 
-	public String getSellerInfo() {
-		return SellerInfo;
+	public String getShipToStore() {
+		return ShipToStore;
 	}
 
-	public void setSellerInfo(String sellerInfo) {
-		SellerInfo = sellerInfo;
+	public void setShipToStore(String shipToStore) {
+		ShipToStore = shipToStore;
 	}
-	
-	
-	
+
+	public String getFreeShipToStore() {
+		return FreeShipToStore;
+	}
+
+	public void setFreeShipToStore(String freeShipToStore) {
+		FreeShipToStore = freeShipToStore;
+	}
+
+	public String getModelNumber() {
+		return ModelNumber;
+	}
+
+	public void setModelNumber(String modelNumber) {
+		ModelNumber = modelNumber;
+	}
+
+	public String getProductUrl() {
+		return ProductUrl;
+	}
+
+	public void setProductUrl(String productUrl) {
+		ProductUrl = productUrl;
+	}
+
+	public String getCustomerRating() {
+		return CustomerRating;
+	}
+
+	public void setCustomerRating(String customerRating) {
+		CustomerRating = customerRating;
+	}
+
+	public String getNumReviews() {
+		return NumReviews;
+	}
+
+	public void setNumReviews(String numReviews) {
+		NumReviews = numReviews;
+	}
+
+	public String getCustomerRatingImage() {
+		return CustomerRatingImage;
+	}
+
+	public void setCustomerRatingImage(String customerRatingImage) {
+		CustomerRatingImage = customerRatingImage;
+	}
+
+	public String getCategoryNode() {
+		return CategoryNode;
+	}
+
+	public void setCategoryNode(String categoryNode) {
+		CategoryNode = categoryNode;
+	}
+
+	public String getBundle() {
+		return Bundle;
+	}
+
+	public void setBundle(String bundle) {
+		Bundle = bundle;
+	}
+
+	public String getClearance() {
+		return Clearance;
+	}
+
+	public void setClearance(String clearance) {
+		Clearance = clearance;
+	}
+
+	public String getPreOrder() {
+		return PreOrder;
+	}
+
+	public void setPreOrder(String preOrder) {
+		PreOrder = preOrder;
+	}
+
+	public String getStock() {
+		return Stock;
+	}
+
+	public void setStock(String stock) {
+		Stock = stock;
+	}
+
 	
 }
