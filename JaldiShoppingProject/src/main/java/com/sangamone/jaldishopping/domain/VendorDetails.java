@@ -13,7 +13,6 @@ public class VendorDetails extends BaseDomain{
 	
 	private Long vendorId;
 	private String vendorName;
-	
 	private String image;
 	
 

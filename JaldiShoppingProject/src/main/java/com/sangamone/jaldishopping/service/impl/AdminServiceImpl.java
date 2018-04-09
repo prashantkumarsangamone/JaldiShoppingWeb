@@ -9,12 +9,14 @@ import org.springframework.stereotype.Component;
 import com.sangamone.jaldishopping.controller.Items;
 import com.sangamone.jaldishopping.controller.Response;
 import com.sangamone.jaldishopping.domain.AuthorityDetails;
+import com.sangamone.jaldishopping.domain.MyListDetails;
 import com.sangamone.jaldishopping.domain.ProductDetails;
 import com.sangamone.jaldishopping.domain.UserDetails;
 import com.sangamone.jaldishopping.exception.JaldiShoppingBaseException;
 import com.sangamone.jaldishopping.repositories.AuthorityDetailsRepository;
 import com.sangamone.jaldishopping.repositories.CategoryDetailsRepository;
 import com.sangamone.jaldishopping.repositories.LocationDetailsRepository;
+import com.sangamone.jaldishopping.repositories.MyListDetailsRepository;
 import com.sangamone.jaldishopping.repositories.ProductDetailsRepository;
 import com.sangamone.jaldishopping.repositories.UserDetailsRepository;
 import com.sangamone.jaldishopping.repositories.VendorDetailsRepository;
@@ -46,6 +48,9 @@ public class AdminServiceImpl implements AdminService
 	
 	@Autowired
 	private LocationDetailsRepository locationDetailsRepository;
+	
+	@Autowired
+	private MyListDetailsRepository myListDetailsRepository;
 	
 
 	@Autowired
@@ -215,11 +220,16 @@ public class AdminServiceImpl implements AdminService
 			return productDetails1;
 	}
 	
-	
-	
-	
-	
-	
-
+	@Override
+	public MyListDetails addMyListDetails(String userId, String productId) {
+		// TODO Auto-generated method stub
+		long initialvalue = 1; 
+		MyListDetails myListDetails = new MyListDetails();
+		myListDetails.setMylistId(initialvalue);
+		myListDetails.setUserId(Long.valueOf(userId));
+		myListDetails.setProductId(Long.valueOf(productId));
+		myListDetailsRepository.save(myListDetails);
+		return myListDetails;	
+	}
 	
 }

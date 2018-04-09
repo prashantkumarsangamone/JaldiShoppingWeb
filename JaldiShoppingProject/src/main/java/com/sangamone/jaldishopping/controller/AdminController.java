@@ -13,14 +13,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import com.sangamone.jaldishopping.constants.Constants;
+import com.sangamone.jaldishopping.domain.MyListDetails;
 import com.sangamone.jaldishopping.domain.ProductDetails;
 import com.sangamone.jaldishopping.domain.UserDetails;
 import com.sangamone.jaldishopping.domain.VendorDetails;
 import com.sangamone.jaldishopping.exception.JaldiShoppingBaseException;
+import com.sangamone.jaldishopping.repositories.ProductDetailsRepository;
 import com.sangamone.jaldishopping.repositories.VendorDetailsRepository;
 import com.sangamone.jaldishopping.services.AdminService;
 import com.sangamone.jaldishopping.utils.ExceptionMessageConvertor;
-
 
 @RestController()
 @RequestMapping("/admin")
@@ -35,8 +36,9 @@ public class AdminController {
 	@Autowired
 	private VendorDetailsRepository vendorDetailsRepository;
 	
+	@Autowired
+	private ProductDetailsRepository productDetailsRepository;
 
-	
 	
 	@RequestMapping(value = { "/", "/login" }, method = RequestMethod.GET)
 	public ModelAndView login(@RequestParam(value = "error", required = false) String error,
@@ -117,12 +119,13 @@ public class AdminController {
 		try {
 			UserDetails userDetails = adminService.validateLogin(userEmail, userPassword);
 			List<VendorDetails> vendorDetails=getVendorList();
-			jaldiShoppingResponse = prepareResponse(null, userDetails,vendorDetails);
+			List<ProductDetails> productDetails=getProductList();
+			jaldiShoppingResponse = prepareResponse(null, userDetails,vendorDetails, productDetails);
 		} catch (Exception e) {
 
 			e.printStackTrace();
 
-			jaldiShoppingResponse = prepareResponse(e, null, null);
+			jaldiShoppingResponse = prepareResponse(e, null, null, null);
 
 		}
 
@@ -132,39 +135,14 @@ public class AdminController {
 	
 
 
+
+
 	private List<VendorDetails> getVendorList() {
 		// TODO Auto-generated method stub
 		return (List<VendorDetails>) vendorDetailsRepository.findAll();
 	}
 
 
-
-	private JaldiShoppingResponse prepareResponse(Exception e, UserDetails userDetails, List<VendorDetails> vendorDetails) {
-
-		JaldiShoppingResponse jaldiShoppingResponse = new JaldiShoppingResponse();
-		
-		
-
-		if (e == null) {
-			
-			
-			jaldiShoppingResponse.setResponseCode(Constants.SUCCESS_RESPONSE_CODE);
-
-			jaldiShoppingResponse.setDescription(Constants.SUCCESS_RESPONSE_MESSAGE);
-			
-			jaldiShoppingResponse.setVendorDetails(vendorDetails);
-			
-			
-		
-		} else {
-
-			jaldiShoppingResponse.setResponseCode(exceptionMessageConvertor.getCode(e));
-			jaldiShoppingResponse.setDescription(exceptionMessageConvertor.getMessage(e));
-
-		}
-
-		return jaldiShoppingResponse;
-	}
 
 	
 	@RequestMapping(value = "/customerSignup", method = RequestMethod.POST, produces = "application/json; charset=UTF-8")
@@ -177,18 +155,20 @@ public class AdminController {
 
 		JaldiShoppingResponse jaldiShoppingResponse;
 		try {
-			UserDetails userDetails=adminService.validateUser(userEmail);
+			UserDetails userDetails= new UserDetails();
+			/*UserDetails userDetails=adminService.validateUser(userEmail);*/
 				
 				adminService.addUsers(firstName,lastName,userEmail,userMobile,zipCode);
 			
 				List<VendorDetails> vendorDetails=getVendorList();
-			jaldiShoppingResponse = prepareResponse(null, userDetails, vendorDetails);
+				List<ProductDetails> productDetails=getProductList();
+			jaldiShoppingResponse = prepareResponse(null, userDetails, vendorDetails, productDetails);
 			
 		} catch (Exception e) {
 
 			e.printStackTrace();
 
-			jaldiShoppingResponse = prepareResponse(e, null, null);
+			jaldiShoppingResponse = prepareResponse(e, null, null, null);
 
 		}
 
@@ -199,6 +179,12 @@ public class AdminController {
 	
 	
 	
+
+	private List<ProductDetails> getProductList() {
+		// TODO Auto-generated method stub
+		return (List<ProductDetails>) productDetailsRepository.findAll();
+	}
+
 
 	@RequestMapping(value = "/getURLInput", method = RequestMethod.GET)
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_SUPER_ADMIN')")
@@ -270,26 +256,6 @@ public class AdminController {
 
 	
 	
-
-	private JaldiShoppingResponse responseProductList(Exception e, List<ProductDetails> productDetails) {
-
-		JaldiShoppingResponse jaldiShoppingResponse = new JaldiShoppingResponse();
-
-		if (e == null) {
-
-			jaldiShoppingResponse.setProductDetails(productDetails);
-			jaldiShoppingResponse.setResponseCode(Constants.SUCCESS_RESPONSE_CODE);
-
-			jaldiShoppingResponse.setDescription(Constants.SUCCESS_RESPONSE_MESSAGE);
-
-		} else {
-			jaldiShoppingResponse.setResponseCode(exceptionMessageConvertor.getCode(e));
-			jaldiShoppingResponse.setDescription(exceptionMessageConvertor.getMessage(e));
-
-		}
-
-		return jaldiShoppingResponse;
-	}
 	
 	
 	@RequestMapping(value = "/getProductListUPC/{barCode}", method = RequestMethod.GET, produces = "application/json; charset=UTF-8")
@@ -330,4 +296,200 @@ public class AdminController {
 
 	}
 
+
+
+	@RequestMapping(value = "/getShoppingDetails/", method = RequestMethod.POST, produces = "application/json; charset=UTF-8")
+	@ResponseBody
+	public JaldiShoppingResponse getShoppingDetails(){
+		JaldiShoppingResponse jaldiShoppingResponse;
+		try {
+			List<VendorDetails> vendorDetails=getVendorList();
+			List<ProductDetails> productDetails=getProductList();
+				
+						jaldiShoppingResponse = responseShoppingDetails(null,vendorDetails, productDetails);
+				
+				
+		} catch (Exception e) {
+			e.printStackTrace();
+			jaldiShoppingResponse = responseShoppingDetails(e, null, null);
+		}
+		return jaldiShoppingResponse;
+
+	}
+	
+
+	@RequestMapping(value = "/getMyListDetails/{userId}/{productId}", method = RequestMethod.POST, produces = "application/json; charset=UTF-8")
+	@ResponseBody
+	public JaldiShoppingResponse getMyListDetails(@RequestBody @PathVariable String userId, @PathVariable String productId){
+		JaldiShoppingResponse jaldiShoppingResponse;
+
+		try {
+			MyListDetails myListDetails = adminService.addMyListDetails(userId,productId);
+			
+		
+			jaldiShoppingResponse = prepareMyListResponse(null);
+		} catch (Exception e) {
+			e.printStackTrace();
+			jaldiShoppingResponse = prepareMyListResponse(e);
+
+		}
+		return jaldiShoppingResponse;
+
+	}
+	
+	@RequestMapping(value = "/getMyListService/{userId}/{productId}", method = RequestMethod.POST, produces = "application/json; charset=UTF-8")
+	@ResponseBody
+	public JaldiShoppingResponse getMyListService(@RequestBody @PathVariable String userId, @PathVariable String productId){
+		JaldiShoppingResponse jaldiShoppingResponse;
+
+		try {
+			MyListDetails myListDetails = adminService.addMyListDetails(userId,productId);
+			
+		
+			jaldiShoppingResponse = prepareMyListResponse(null);
+		} catch (Exception e) {
+			e.printStackTrace();
+			jaldiShoppingResponse = prepareMyListResponse(e);
+
+		}
+		return jaldiShoppingResponse;
+
+	}
+	
+
+	private JaldiShoppingResponse prepareResponse(Exception e, UserDetails userDetails, List<VendorDetails> vendorDetails, List<ProductDetails> productDetails) {
+
+		JaldiShoppingResponse jaldiShoppingResponse = new JaldiShoppingResponse();
+		
+		
+
+		if (e == null) {
+			
+			
+			jaldiShoppingResponse.setResponseCode(Constants.SUCCESS_RESPONSE_CODE);
+
+			jaldiShoppingResponse.setDescription(Constants.SUCCESS_RESPONSE_MESSAGE);
+			
+			jaldiShoppingResponse.setVendorDetails(vendorDetails);
+			
+			jaldiShoppingResponse.setProductDetails(productDetails);
+			
+			
+		} else {
+
+			jaldiShoppingResponse.setResponseCode(exceptionMessageConvertor.getCode(e));
+			jaldiShoppingResponse.setDescription(exceptionMessageConvertor.getMessage(e));
+
+		}
+
+		return jaldiShoppingResponse;
+	}
+	
+/*
+	private JaldiShoppingResponse prepareLoginResponse(Exception e, Object object, Object object2, Object object3) {
+
+		JaldiShoppingResponse jaldiShoppingResponse = new JaldiShoppingResponse();
+		
+		
+
+		if (e == null) {
+			
+			
+			jaldiShoppingResponse.setResponseCode(Constants.SUCCESS_RESPONSE_CODE);
+
+			jaldiShoppingResponse.setDescription(Constants.SUCCESS_RESPONSE_MESSAGE);
+			
+			jaldiShoppingResponse.setVendorDetails(vendorDetails);
+			
+			jaldiShoppingResponse.setProductDetails(productDetails);
+			
+			
+		} else {
+
+			jaldiShoppingResponse.setResponseCode(exceptionMessageConvertor.getCode(e));
+			jaldiShoppingResponse.setDescription(exceptionMessageConvertor.getMessage(e));
+
+		}
+
+		return jaldiShoppingResponse;
+	}*/
+
+
+	private JaldiShoppingResponse responseProductList(Exception e, List<ProductDetails> productDetails) {
+
+		JaldiShoppingResponse jaldiShoppingResponse = new JaldiShoppingResponse();
+
+		if (e == null) {
+
+			jaldiShoppingResponse.setProductDetails(productDetails);
+			jaldiShoppingResponse.setResponseCode(Constants.SUCCESS_RESPONSE_CODE);
+
+			jaldiShoppingResponse.setDescription(Constants.SUCCESS_RESPONSE_MESSAGE);
+
+		} else {
+			jaldiShoppingResponse.setResponseCode(exceptionMessageConvertor.getCode(e));
+			jaldiShoppingResponse.setDescription(exceptionMessageConvertor.getMessage(e));
+
+		}
+
+		return jaldiShoppingResponse;
+	}
+	
+	
+
+	private JaldiShoppingResponse responseShoppingDetails(Exception e, List<VendorDetails> vendorDetails, List<ProductDetails> productDetails) {
+
+		JaldiShoppingResponse jaldiShoppingResponse = new JaldiShoppingResponse();
+		
+		
+
+		if (e == null) {
+			
+			
+			jaldiShoppingResponse.setResponseCode(Constants.SUCCESS_RESPONSE_CODE);
+
+			jaldiShoppingResponse.setDescription(Constants.SUCCESS_RESPONSE_MESSAGE);
+			
+			jaldiShoppingResponse.setVendorDetails(vendorDetails);
+			
+			jaldiShoppingResponse.setProductDetails(productDetails);
+			
+			
+		
+		} else {
+
+			jaldiShoppingResponse.setResponseCode(exceptionMessageConvertor.getCode(e));
+			jaldiShoppingResponse.setDescription(exceptionMessageConvertor.getMessage(e));
+
+		}
+
+		return jaldiShoppingResponse;
+	}
+
+
+	
+
+	private JaldiShoppingResponse prepareMyListResponse(Exception e) {
+
+		JaldiShoppingResponse jaldiShoppingResponse = new JaldiShoppingResponse();
+		
+		
+
+		if (e == null) {
+			
+			
+			jaldiShoppingResponse.setResponseCode(Constants.SUCCESS_RESPONSE_CODE);
+			jaldiShoppingResponse.setDescription(Constants.SUCCESS_RESPONSE_MESSAGE);
+		
+				
+		} else {
+
+			jaldiShoppingResponse.setResponseCode(exceptionMessageConvertor.getCode(e));
+			jaldiShoppingResponse.setDescription(exceptionMessageConvertor.getMessage(e));
+
+		}
+
+		return jaldiShoppingResponse;
+	}
+	
 }
