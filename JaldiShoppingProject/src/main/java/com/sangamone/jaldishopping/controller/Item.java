@@ -5,7 +5,7 @@ public class Item {
 	
 public String ItemId;
 	
-	public String parentItemId;
+	public String ParentItemId;
 
 	public String Name;
 
@@ -74,11 +74,11 @@ public String ItemId;
 	}
 
 	public String getParentItemId() {
-		return parentItemId;
+		return ParentItemId;
 	}
 
 	public void setParentItemId(String parentItemId) {
-		this.parentItemId = parentItemId;
+		ParentItemId = parentItemId;
 	}
 
 	public String getName() {
@@ -312,6 +312,7 @@ public String ItemId;
 	public void setStock(String stock) {
 		Stock = stock;
 	}
-
 	
+	
+
 }

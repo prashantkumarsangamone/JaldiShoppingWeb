@@ -8,9 +8,9 @@ use JaldiShopping;
 CREATE TABLE js_user_details (
   id varchar(255) NOT NULL,
   userId bigint(20) NOT NULL AUTO_INCREMENT,
-  firstName varchar(30) NOT NULL,
-  lastName varchar(30) NOT NULL,
-  userEmail varchar(30) UNIQUE KEY,
+  firstName varchar(50) NOT NULL,
+  lastName varchar(50) NULL,
+  userEmail varchar(50) UNIQUE KEY,
   userMobile varchar(30) NULL,
   userPassword varchar(80) NOT NULL,
   zipCode bigint(20) NULL,
@@ -18,10 +18,10 @@ CREATE TABLE js_user_details (
   PRIMARY KEY (userId)
 );
 
-/*
-insert into js_user_details(userId,firstName,lastName,userEmail,userMobile,userPassword,zipCode,enabled) 
-values(1,'Vivek','Marathe','vivekmudupi@gmail.com','8971029302','6000ac4bc22ce6ea4adcae78b0ff87412d05e4c35912c38a740ff6dcbb97b659','576107',1);
-*/
+
+insert into js_user_details(id,userId,firstName,lastName,userEmail,userMobile,userPassword,zipCode,enabled) 
+values(1,1,'Vivek','Marathe','vivekmudupi@gmail.com','8971029302','6000ac4bc22ce6ea4adcae78b0ff87412d05e4c35912c38a740ff6dcbb97b659','576107',1);
+
 
 /* Authorites Table*/
 
@@ -33,9 +33,9 @@ create table js_authorities_details (
       constraint fk_authorities_js_users foreign key(userEmail) references js_user_details(userEmail)
       );
 
-/*
-insert into js_authorities_details(authorityId,userEmail,authority) values(1,'vivekmudupi@gmail.com','ROLE_ADMIN');
-*/
+
+insert into js_authorities_details(id,authorityId,userEmail,authority) values(1,1,'vivekmudupi@gmail.com','ROLE_ADMIN');
+
 
 /* Location Details Table*/
 create table js_location_details(
@@ -51,16 +51,57 @@ PRIMARY KEY (locationId)
 );
 
 
+insert into js_location_details(id,locationId,locationName,latitude,longitude,country,state,city)
+ values(1,1,'Mumbai',1,1,'IND','MAH','MUM');
+
 
 /* Vendor Details Table*/
 create table js_vendor_details(
 id varchar(255) NOT NULL,
 vendorId BIGINT NOT NULL AUTO_INCREMENT,
-vendorName varchar(255) NOT NULL, 
+vendorName varchar(255) NOT NULL,
+image varchar(255) NOT NULL,
 locationId bigint(20) NOT NULL,
 foreign key (locationId) references js_location_details(locationId),
 PRIMARY KEY (vendorId)
 );
+
+insert into js_vendor_details(id,vendorId,vendorName,image,locationId)
+ values(1,1,'Walmart','http://sangamone.com/JaldiShopping/VendorDetails/Walmart.png',1);
+
+
+insert into js_vendor_details(id,vendorId,vendorName,image,locationId)
+ values(2,2,'SuperMarket','http://sangamone.com/JaldiShopping/VendorDetails/SuperMarket.png',1);
+
+
+insert into js_vendor_details(id,vendorId,vendorName,image,locationId)
+ values(3,3,'BigBazaar','http://sangamone.com/JaldiShopping/VendorDetails/BigBazaar.png',1);
+
+
+insert into js_vendor_details(id,vendorId,vendorName,image,locationId)
+ values(4,4,'HyperCity','http://sangamone.com/JaldiShopping/VendorDetails/HyperCity.png',1);
+
+
+/* Store Details Table*/
+ create table js_store_details(
+id varchar(255) NOT NULL,
+storeId BIGINT NOT NULL AUTO_INCREMENT,
+storeName varchar(255) NOT NULL,
+storePhoneNumber varchar(155) NOT NULL,
+sundayOpen varchar(155) NOT NULL,
+timeZone varchar(155) NOT NULL,
+latitude varchar(155) NULL,
+longitude varchar(155) NULL,
+country varchar(155) NOT NULL,
+state varchar(155) NOT NULL,
+city varchar(155) NOT NULL,
+stateProvCode varchar(155) NOT NULL,
+zipCode varchar(155) NOT NULL,
+vendorId bigint(20) NOT NULL,
+foreign key (vendorId) references js_vendor_details(vendorId),
+PRIMARY KEY (storeId)
+);
+
 
 
 /* Category Details Table*/
@@ -72,10 +113,13 @@ categoryName varchar(255) NOT NULL,
 PRIMARY KEY (categoryId)
 );
 
+insert into js_category_details(id,categoryId,categoryCode,categoryName)
+ values(1,1,'COD','Shopping');
+
 /* Products Details Table*/
 create table js_product_details(
 id varchar(255) NOT NULL,
-productId BIGINT NOT NULL AUTO_INCREMENT,
+productId BIGINT NOT NULL,
 productName varchar(155) NOT NULL, 
 productCode varchar(155) NOT NULL,
 barCode varchar(155) NOT NULL,
@@ -83,6 +127,7 @@ productPrice varchar(155) NOT NULL,
 productQuantity varchar(155) NOT NULL,
 productInfo varchar(255) NULL,
 productReview varchar(255) NULL,
+productImagePath varchar(8000)NULL,
 categoryId bigint(20) NOT NULL,
 vendorId bigint(20) NOT NULL,
 locationId bigint(20) NOT NULL,
@@ -91,6 +136,31 @@ foreign key (categoryId) references js_category_details(categoryId),
 foreign key (vendorId) references js_vendor_details(vendorId),
 PRIMARY KEY (productId)
 );
+
+insert into js_product_details(id,productId,productName,productCode,barCode,productPrice,productQuantity,productInfo,productReview,productImagePath,categoryId,vendorId,locationId)
+ values(1,12417833,'MLB - Toothpaste','123','12417833','12.95','1','Paste',4,'http://sangamone.com/JaldiShopping/ProductDetails/ColgateToothpaste.jpg',1,1,1);
+
+
+insert into js_product_details(id,productId,productName,productCode,barCode,productPrice,productQuantity,productInfo,productReview,productImagePath,categoryId,vendorId,locationId)
+ values(2,12417834,'MLB - Phone','123','12417834','12.95','1','Phone',4,'http://sangamone.com/JaldiShopping/ProductDetails/GooglePhone.jpg',1,1,1);
+
+
+insert into js_product_details(id,productId,productName,productCode,barCode,productPrice,productQuantity,productInfo,productReview,productImagePath,categoryId,vendorId,locationId)
+ values(3,12417835,'MLB - Groceries','123','12417835','12.95','1','Groceries',4,'http://sangamone.com/JaldiShopping/ProductDetails/Groceries.jpg',1,1,1);
+
+
+/* MyList Details Table*/
+create table js_mylist_details(
+id varchar(255) NOT NULL,
+mylistId BIGINT NOT NULL AUTO_INCREMENT,
+userId bigint(20) NOT NULL,
+productId bigint(20) NOT NULL, 
+foreign key (userId) references js_user_details(userId),
+foreign key (productId) references js_product_details(productId),
+PRIMARY KEY (mylistId)
+);
+
+
 
 /* Cart Details Table*/
 create table js_cart_details(

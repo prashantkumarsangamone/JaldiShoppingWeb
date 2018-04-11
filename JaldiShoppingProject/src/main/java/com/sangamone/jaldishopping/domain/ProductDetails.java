@@ -20,6 +20,7 @@ public class ProductDetails extends BaseDomain{
 	private String productQuantity;
 	private String productInfo;
 	private String productReview;
+	private String productImagePath;
 	private Long vendorId;
 	private Long categoryId;
 	private Long locationId;
@@ -135,6 +136,16 @@ public class ProductDetails extends BaseDomain{
 	public void setVendorDetails(VendorDetails vendorDetails) {
 		this.vendorDetails = vendorDetails;
 	}
+	
+
+	public String getProductImagePath() {
+		return productImagePath;
+	}
+
+	public void setProductImagePath(String productImagePath) {
+		this.productImagePath = productImagePath;
+	}
+
 
 	@ManyToOne
 	@JoinColumn(name = "locationId", insertable = false, updatable = false, nullable = false)

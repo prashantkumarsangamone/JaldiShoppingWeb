@@ -16,7 +16,7 @@ public interface AdminService {
 	void addUsers(String firstName, String lastName, String userEmail, String userMobile,
 			String zipCode);
 
-	UserDetails validateLogin(String userEmail, String userPassword);
+	UserDetails validateLogin(String userEmail, String userPassword) throws JaldiShoppingBaseException;
 
 	ProductDetails addProductDetails(Long productId, Long categoryId, Long vendorId, Long locationId);
 
@@ -29,6 +29,8 @@ public interface AdminService {
 	ProductDetails addProductDetails1(String barCode);
 
 	MyListDetails addMyListDetails(String userId, String productId);
+
+	MyListDetails getMyListDetails(String userId);
 
 	
 

@@ -125,7 +125,7 @@ public class AdminController {
 
 			e.printStackTrace();
 
-			jaldiShoppingResponse = prepareResponse(e, null, null, null);
+			jaldiShoppingResponse = prepareLoginResponse(e, null, null, null);
 
 		}
 
@@ -327,35 +327,40 @@ public class AdminController {
 			MyListDetails myListDetails = adminService.addMyListDetails(userId,productId);
 			
 		
-			jaldiShoppingResponse = prepareMyListResponse(null);
+			jaldiShoppingResponse = prepareMyListResponse(null, null);
 		} catch (Exception e) {
 			e.printStackTrace();
-			jaldiShoppingResponse = prepareMyListResponse(e);
+			jaldiShoppingResponse = prepareMyListResponse(e, null);
 
 		}
 		return jaldiShoppingResponse;
 
 	}
 	
-	@RequestMapping(value = "/getMyListService/{userId}/{productId}", method = RequestMethod.POST, produces = "application/json; charset=UTF-8")
+	
+	@RequestMapping(value = "/getMyListService/{userId}", method = RequestMethod.POST, produces = "application/json; charset=UTF-8")
 	@ResponseBody
-	public JaldiShoppingResponse getMyListService(@RequestBody @PathVariable String userId, @PathVariable String productId){
+	public JaldiShoppingResponse getMyListDetails(@RequestBody @PathVariable String userId){
 		JaldiShoppingResponse jaldiShoppingResponse;
 
 		try {
-			MyListDetails myListDetails = adminService.addMyListDetails(userId,productId);
+			MyListDetails myListDetails = adminService.getMyListDetails(userId);
 			
 		
-			jaldiShoppingResponse = prepareMyListResponse(null);
+			jaldiShoppingResponse = prepareMyListResponse(null, null);
 		} catch (Exception e) {
 			e.printStackTrace();
-			jaldiShoppingResponse = prepareMyListResponse(e);
+			jaldiShoppingResponse = prepareMyListResponse(e, null);
 
 		}
 		return jaldiShoppingResponse;
 
 	}
+
 	
+	
+	
+												/*  Responses   */
 
 	private JaldiShoppingResponse prepareResponse(Exception e, UserDetails userDetails, List<VendorDetails> vendorDetails, List<ProductDetails> productDetails) {
 
@@ -377,16 +382,16 @@ public class AdminController {
 			
 		} else {
 
-			jaldiShoppingResponse.setResponseCode(exceptionMessageConvertor.getCode(e));
-			jaldiShoppingResponse.setDescription(exceptionMessageConvertor.getMessage(e));
+			jaldiShoppingResponse.setResponseCode(Constants.NOT_VALID_CREDENTIALS);
+		    jaldiShoppingResponse.setDescription(Constants.NOT_VALID_CREDENTIALS_MESSAGE);
 
 		}
 
 		return jaldiShoppingResponse;
 	}
 	
-/*
-	private JaldiShoppingResponse prepareLoginResponse(Exception e, Object object, Object object2, Object object3) {
+
+	private JaldiShoppingResponse prepareLoginResponse(Exception e, UserDetails userDetails, List<VendorDetails> vendorDetails, List<ProductDetails> productDetails) {
 
 		JaldiShoppingResponse jaldiShoppingResponse = new JaldiShoppingResponse();
 		
@@ -406,13 +411,14 @@ public class AdminController {
 			
 		} else {
 
-			jaldiShoppingResponse.setResponseCode(exceptionMessageConvertor.getCode(e));
-			jaldiShoppingResponse.setDescription(exceptionMessageConvertor.getMessage(e));
+			
+			jaldiShoppingResponse.setResponseCode(Constants.NOT_VALID_CREDENTIALS);
+		    jaldiShoppingResponse.setDescription(Constants.NOT_VALID_CREDENTIALS_MESSAGE);
 
 		}
 
 		return jaldiShoppingResponse;
-	}*/
+	}
 
 
 	private JaldiShoppingResponse responseProductList(Exception e, List<ProductDetails> productDetails) {
@@ -427,8 +433,8 @@ public class AdminController {
 			jaldiShoppingResponse.setDescription(Constants.SUCCESS_RESPONSE_MESSAGE);
 
 		} else {
-			jaldiShoppingResponse.setResponseCode(exceptionMessageConvertor.getCode(e));
-			jaldiShoppingResponse.setDescription(exceptionMessageConvertor.getMessage(e));
+			jaldiShoppingResponse.setResponseCode(Constants.NOT_VALID_PRODUCT_CODE);
+		    jaldiShoppingResponse.setDescription(Constants.NOT_VALID_PRODUCT_CODE_MESSAGE);
 
 		}
 
@@ -469,7 +475,7 @@ public class AdminController {
 
 	
 
-	private JaldiShoppingResponse prepareMyListResponse(Exception e) {
+	private JaldiShoppingResponse prepareMyListResponse(Exception e,List<MyListDetails> myListDetails) {
 
 		JaldiShoppingResponse jaldiShoppingResponse = new JaldiShoppingResponse();
 		
@@ -477,7 +483,7 @@ public class AdminController {
 
 		if (e == null) {
 			
-			
+			jaldiShoppingResponse.setMyListDetails(myListDetails);
 			jaldiShoppingResponse.setResponseCode(Constants.SUCCESS_RESPONSE_CODE);
 			jaldiShoppingResponse.setDescription(Constants.SUCCESS_RESPONSE_MESSAGE);
 		
@@ -491,5 +497,6 @@ public class AdminController {
 
 		return jaldiShoppingResponse;
 	}
-	
+
+
 }

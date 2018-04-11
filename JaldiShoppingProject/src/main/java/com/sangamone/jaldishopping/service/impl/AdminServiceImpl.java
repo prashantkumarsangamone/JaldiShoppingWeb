@@ -12,6 +12,7 @@ import com.sangamone.jaldishopping.domain.AuthorityDetails;
 import com.sangamone.jaldishopping.domain.MyListDetails;
 import com.sangamone.jaldishopping.domain.ProductDetails;
 import com.sangamone.jaldishopping.domain.UserDetails;
+import com.sangamone.jaldishopping.exception.EmailIdAlreadyExistException;
 import com.sangamone.jaldishopping.exception.JaldiShoppingBaseException;
 import com.sangamone.jaldishopping.repositories.AuthorityDetailsRepository;
 import com.sangamone.jaldishopping.repositories.CategoryDetailsRepository;
@@ -64,6 +65,8 @@ public class AdminServiceImpl implements AdminService
 	
 	@Autowired
 	private ProductDetailsRepository productDetailsRepository;
+	
+
 
 
 	@Override
@@ -104,7 +107,7 @@ public class AdminServiceImpl implements AdminService
 		
 	}
 	
-	public UserDetails validateLogin(String userEmail, String userPassword) {
+	public UserDetails validateLogin(String userEmail, String userPassword)throws EmailIdAlreadyExistException {
 		// TODO Auto-generated method stub
 		UserDetails userDetails = userDetailsRepository.findByUserEmailAndUserPassword(userEmail,
 				ShaUtils.getHash(userPassword));
@@ -164,14 +167,15 @@ public class AdminServiceImpl implements AdminService
 			 System.out.println(response);
 			ProductDetails productDetails1 = new ProductDetails();
 			    productDetails1.setId(initialstring);
-			    productDetails1.setProductId(Long.valueOf(response.item.get(0).getItemId()));
+			    productDetails1.setProductId(Long.valueOf(response.item.get(0).getParentItemId()));
 			    productDetails1.setProductName(response.item.get(0).getName());
 				productDetails1.setProductCode(initialstring);
-				productDetails1.setBarCode(response.item.get(0).getUpc());
+				productDetails1.setBarCode(response.item.get(0).getItemId());
 				productDetails1.setProductPrice(response.item.get(0).getSalePrice());
 				productDetails1.setProductQuantity(initialstring);
 				productDetails1.setProductInfo(response.item.get(0).getCategoryPath());
 				productDetails1.setProductReview(response.item.get(0).getNumReviews());
+				productDetails1.setProductImagePath(initialstring);
 				productDetails1.setCategoryId(initialvalue);
 				productDetails1.setLocationId(initialvalue);
 				productDetails1.setVendorId(initialvalue);
@@ -212,6 +216,7 @@ public class AdminServiceImpl implements AdminService
 			productDetails1.setProductQuantity(initialstring);
 			productDetails1.setProductInfo(items.get(0).getItems().get(0).getCategoryPath());
 			productDetails1.setProductReview(items.get(0).getItems().get(0).getNumReviews());
+			productDetails1.setProductImagePath(initialstring);
 			productDetails1.setCategoryId(initialvalue);
 			productDetails1.setLocationId(initialvalue);
 			productDetails1.setVendorId(initialvalue);
@@ -230,6 +235,12 @@ public class AdminServiceImpl implements AdminService
 		myListDetails.setProductId(Long.valueOf(productId));
 		myListDetailsRepository.save(myListDetails);
 		return myListDetails;	
+	}
+	
+	@Override
+	public MyListDetails getMyListDetails(String userId) {
+		MyListDetails myListDetails = myListDetailsRepository.findByUserId(userId);
+		return myListDetails;
 	}
 	
 }
