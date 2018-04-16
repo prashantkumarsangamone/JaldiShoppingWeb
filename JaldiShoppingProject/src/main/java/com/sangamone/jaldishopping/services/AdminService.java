@@ -5,18 +5,19 @@ import java.util.List;
 import com.sangamone.jaldishopping.domain.MyListDetails;
 import com.sangamone.jaldishopping.domain.ProductDetails;
 import com.sangamone.jaldishopping.domain.UserDetails;
+import com.sangamone.jaldishopping.exception.EmailIdAlreadyExistException;
 import com.sangamone.jaldishopping.exception.JaldiShoppingBaseException;
 
 public interface AdminService {
 
 
 
-	UserDetails validateUser(String emailId);
+	UserDetails validateUser(String emailId) throws EmailIdAlreadyExistException;
 
 	void addUsers(String firstName, String lastName, String userEmail, String userMobile,
 			String zipCode);
 
-	UserDetails validateLogin(String userEmail, String userPassword) throws JaldiShoppingBaseException;
+	UserDetails validateLogin(String userEmail, String userPassword);
 
 	ProductDetails addProductDetails(Long productId, Long categoryId, Long vendorId, Long locationId);
 
@@ -30,7 +31,9 @@ public interface AdminService {
 
 	MyListDetails addMyListDetails(String userId, String productId);
 
-	MyListDetails getMyListDetails(String userId);
+	List<MyListDetails> getMyListDetails(String userId);
+
+	
 
 	
 

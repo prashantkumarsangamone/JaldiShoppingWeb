@@ -1,9 +1,13 @@
 package com.sangamone.jaldishopping.domain;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 
 
 
@@ -16,11 +20,14 @@ public class MyListDetails extends BaseDomain{
 	private Long userId;
 	private Long productId;
 	
+	
 	@ManyToOne
 	@JoinColumn(name = "userId", insertable = false, updatable = false, nullable = false)
 	private UserDetails userDetails;
 	
-	@ManyToOne
+	//@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
+	@NotFound(action = NotFoundAction.IGNORE)
 	@JoinColumn(name = "productId", insertable = false, updatable = false, nullable = false)
 	private ProductDetails productDetails;
 
@@ -39,6 +46,7 @@ public class MyListDetails extends BaseDomain{
 	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
+	
 
 	public Long getProductId() {
 		return productId;
@@ -63,6 +71,6 @@ public class MyListDetails extends BaseDomain{
 	public void setProductDetails(ProductDetails productDetails) {
 		this.productDetails = productDetails;
 	}
-	
+
 
 }

@@ -70,7 +70,7 @@ public class AdminServiceImpl implements AdminService
 
 
 	@Override
-	public UserDetails validateUser(String userEmail) {
+	public UserDetails validateUser(String userEmail)throws EmailIdAlreadyExistException {
 		// TODO Auto-generated method stub
 		return userDetailsRepository.findByUserEmail(userEmail);
 	}
@@ -107,7 +107,7 @@ public class AdminServiceImpl implements AdminService
 		
 	}
 	
-	public UserDetails validateLogin(String userEmail, String userPassword)throws EmailIdAlreadyExistException {
+	public UserDetails validateLogin(String userEmail, String userPassword){
 		// TODO Auto-generated method stub
 		UserDetails userDetails = userDetailsRepository.findByUserEmailAndUserPassword(userEmail,
 				ShaUtils.getHash(userPassword));
@@ -228,7 +228,7 @@ public class AdminServiceImpl implements AdminService
 	@Override
 	public MyListDetails addMyListDetails(String userId, String productId) {
 		// TODO Auto-generated method stub
-		long initialvalue = 1; 
+		long initialvalue = 2; 
 		MyListDetails myListDetails = new MyListDetails();
 		myListDetails.setMylistId(initialvalue);
 		myListDetails.setUserId(Long.valueOf(userId));
@@ -236,11 +236,11 @@ public class AdminServiceImpl implements AdminService
 		myListDetailsRepository.save(myListDetails);
 		return myListDetails;	
 	}
-	
 	@Override
-	public MyListDetails getMyListDetails(String userId) {
-		MyListDetails myListDetails = myListDetailsRepository.findByUserId(userId);
-		return myListDetails;
+	public List<MyListDetails> getMyListDetails(String userId) {
+		// TODO Auto-generated method stub
+		return myListDetailsRepository.getByUserId(Long.valueOf(userId));
 	}
+	
 	
 }

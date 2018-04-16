@@ -17,7 +17,9 @@ import com.sangamone.jaldishopping.domain.MyListDetails;
 import com.sangamone.jaldishopping.domain.ProductDetails;
 import com.sangamone.jaldishopping.domain.UserDetails;
 import com.sangamone.jaldishopping.domain.VendorDetails;
+import com.sangamone.jaldishopping.exception.EmailIdAlreadyExistException;
 import com.sangamone.jaldishopping.exception.JaldiShoppingBaseException;
+import com.sangamone.jaldishopping.repositories.MyListDetailsRepository;
 import com.sangamone.jaldishopping.repositories.ProductDetailsRepository;
 import com.sangamone.jaldishopping.repositories.VendorDetailsRepository;
 import com.sangamone.jaldishopping.services.AdminService;
@@ -38,6 +40,9 @@ public class AdminController {
 	
 	@Autowired
 	private ProductDetailsRepository productDetailsRepository;
+	
+	@Autowired
+	private MyListDetailsRepository myListDetailsRepository;
 
 	
 	@RequestMapping(value = { "/", "/login" }, method = RequestMethod.GET)
@@ -90,7 +95,7 @@ public class AdminController {
 			@RequestParam(value = "lastName", required = false) String lastName,
 			@RequestParam(value = "userEmail", required = false) String userEmail,
 			@RequestParam(value = "userMobile", required = false) String userMobile,
-			@RequestParam(value = "zipCode", required = false) String zipCode) {
+			@RequestParam(value = "zipCode", required = false) String zipCode) throws EmailIdAlreadyExistException {
 
 		ModelAndView model = new ModelAndView();
 	UserDetails userDetails=adminService.validateUser(userEmail);
@@ -105,6 +110,37 @@ public class AdminController {
 			model.addObject("error","Email Id already Exist");
 			model.setViewName("login/signup");
 		}
+		return model;
+
+	}
+
+	@RequestMapping(value = "/getURLInput", method = RequestMethod.GET)
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_SUPER_ADMIN')")
+	public ModelAndView getURLInput() {
+
+		ModelAndView model = new ModelAndView();
+
+		model.setViewName("reports/URLInput");
+
+		return model;
+
+	}
+
+	@RequestMapping(value = "/getURLInputDetails", method = RequestMethod.POST ,produces = "application/json; charset=UTF-8")
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_SUPER_ADMIN')")
+	public ModelAndView getURLInputDetails(Principal principal,
+			@RequestParam(value = "productId", required = false) Long productId,
+			@RequestParam(value = "categoryId", required = false) Long categoryId,
+			@RequestParam(value = "vendorId", required = false) Long vendorId,
+			@RequestParam(value = "locationId", required = false) Long locationId) {
+
+		ModelAndView model = new ModelAndView();
+		ProductDetails productDetails = 
+				adminService.addProductDetails(productId,categoryId,vendorId,locationId);
+		
+	
+		model.setViewName("reports/URLInput");
+
 		return model;
 
 	}
@@ -155,20 +191,20 @@ public class AdminController {
 
 		JaldiShoppingResponse jaldiShoppingResponse;
 		try {
-			UserDetails userDetails= new UserDetails();
-			/*UserDetails userDetails=adminService.validateUser(userEmail);*/
+			//UserDetails userDetails= new UserDetails();
+			UserDetails userDetails=adminService.validateUser(userEmail);
 				
 				adminService.addUsers(firstName,lastName,userEmail,userMobile,zipCode);
 			
 				List<VendorDetails> vendorDetails=getVendorList();
 				List<ProductDetails> productDetails=getProductList();
-			jaldiShoppingResponse = prepareResponse(null, userDetails, vendorDetails, productDetails);
+			jaldiShoppingResponse = prepareSignUpResponse(null, userDetails, vendorDetails, productDetails);
 			
 		} catch (Exception e) {
 
 			e.printStackTrace();
 
-			jaldiShoppingResponse = prepareResponse(e, null, null, null);
+			jaldiShoppingResponse = prepareSignUpResponse(e, null, null, null);
 
 		}
 
@@ -186,36 +222,6 @@ public class AdminController {
 	}
 
 
-	@RequestMapping(value = "/getURLInput", method = RequestMethod.GET)
-	@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_SUPER_ADMIN')")
-	public ModelAndView getURLInput() {
-
-		ModelAndView model = new ModelAndView();
-
-		model.setViewName("reports/URLInput");
-
-		return model;
-
-	}
-
-	@RequestMapping(value = "/getURLInputDetails", method = RequestMethod.POST ,produces = "application/json; charset=UTF-8")
-	@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_SUPER_ADMIN')")
-	public ModelAndView getURLInputDetails(Principal principal,
-			@RequestParam(value = "productId", required = false) Long productId,
-			@RequestParam(value = "categoryId", required = false) Long categoryId,
-			@RequestParam(value = "vendorId", required = false) Long vendorId,
-			@RequestParam(value = "locationId", required = false) Long locationId) {
-
-		ModelAndView model = new ModelAndView();
-		ProductDetails productDetails = 
-				adminService.addProductDetails(productId,categoryId,vendorId,locationId);
-		
-	
-		model.setViewName("reports/URLInput");
-
-		return model;
-
-	}
 	
 	
 	@RequestMapping(value = "/getProductList/{productId}", method = RequestMethod.GET, produces = "application/json; charset=UTF-8")
@@ -255,8 +261,7 @@ public class AdminController {
 	
 
 	
-	
-	
+
 	
 	@RequestMapping(value = "/getProductListUPC/{barCode}", method = RequestMethod.GET, produces = "application/json; charset=UTF-8")
 	@ResponseBody
@@ -298,7 +303,7 @@ public class AdminController {
 
 
 
-	@RequestMapping(value = "/getShoppingDetails/", method = RequestMethod.POST, produces = "application/json; charset=UTF-8")
+	@RequestMapping(value = "/getShoppingDetails/", method = RequestMethod.GET, produces = "application/json; charset=UTF-8")
 	@ResponseBody
 	public JaldiShoppingResponse getShoppingDetails(){
 		JaldiShoppingResponse jaldiShoppingResponse;
@@ -318,49 +323,58 @@ public class AdminController {
 	}
 	
 
-	@RequestMapping(value = "/getMyListDetails/{userId}/{productId}", method = RequestMethod.POST, produces = "application/json; charset=UTF-8")
+	@RequestMapping(value = "/getMyListDetails/", method = RequestMethod.POST, produces = "application/json; charset=UTF-8")
 	@ResponseBody
-	public JaldiShoppingResponse getMyListDetails(@RequestBody @PathVariable String userId, @PathVariable String productId){
+	public JaldiShoppingResponse getMyListDetails(@RequestBody @RequestParam(value = "userId", required = false) String userId,
+			@RequestParam(value = "productId", required = false) String productId){
+		System.out.println(userId+"--------------------"+productId);
 		JaldiShoppingResponse jaldiShoppingResponse;
 
 		try {
 			MyListDetails myListDetails = adminService.addMyListDetails(userId,productId);
 			
-		
-			jaldiShoppingResponse = prepareMyListResponse(null, null);
+			jaldiShoppingResponse = prepareMyListResponse(null);
 		} catch (Exception e) {
 			e.printStackTrace();
-			jaldiShoppingResponse = prepareMyListResponse(e, null);
+			jaldiShoppingResponse = prepareMyListResponse(e);
 
 		}
 		return jaldiShoppingResponse;
 
 	}
-	
-	
-	@RequestMapping(value = "/getMyListService/{userId}", method = RequestMethod.POST, produces = "application/json; charset=UTF-8")
-	@ResponseBody
-	public JaldiShoppingResponse getMyListDetails(@RequestBody @PathVariable String userId){
-		JaldiShoppingResponse jaldiShoppingResponse;
 
+	
+	
+	@RequestMapping(value = "/getMyListService", method = RequestMethod.POST, produces = "application/json; charset=UTF-8")
+	@ResponseBody
+	public JaldiShoppingResponse getMyListService(@RequestBody @RequestParam(value = "userId", required = false) String userId){
+		JaldiShoppingResponse jaldiShoppingResponse;
+		
 		try {
-			MyListDetails myListDetails = adminService.getMyListDetails(userId);
 			
 		
-			jaldiShoppingResponse = prepareMyListResponse(null, null);
+			List<MyListDetails> myListDetails=adminService.getMyListDetails(userId);
+			List<ProductDetails> productDetails=getProductList();
+
+			jaldiShoppingResponse = prepareMyListDetailsResponse(null,myListDetails,productDetails);
 		} catch (Exception e) {
 			e.printStackTrace();
-			jaldiShoppingResponse = prepareMyListResponse(e, null);
+			jaldiShoppingResponse = prepareMyListDetailsResponse(e, null, null);
 
 		}
 		return jaldiShoppingResponse;
 
 	}
 
-	
 	
 	
 												/*  Responses   */
+
+	
+
+
+
+
 
 	private JaldiShoppingResponse prepareResponse(Exception e, UserDetails userDetails, List<VendorDetails> vendorDetails, List<ProductDetails> productDetails) {
 
@@ -384,6 +398,33 @@ public class AdminController {
 
 			jaldiShoppingResponse.setResponseCode(Constants.NOT_VALID_CREDENTIALS);
 		    jaldiShoppingResponse.setDescription(Constants.NOT_VALID_CREDENTIALS_MESSAGE);
+
+		}
+
+		return jaldiShoppingResponse;
+	}
+	private JaldiShoppingResponse prepareSignUpResponse(Exception e, UserDetails userDetails, List<VendorDetails> vendorDetails, List<ProductDetails> productDetails) {
+
+		JaldiShoppingResponse jaldiShoppingResponse = new JaldiShoppingResponse();
+		
+		
+
+		if (e == null) {
+			
+			
+			jaldiShoppingResponse.setResponseCode(Constants.SUCCESS_RESPONSE_CODE);
+
+			jaldiShoppingResponse.setDescription(Constants.SUCCESS_RESPONSE_MESSAGE);
+			
+			jaldiShoppingResponse.setVendorDetails(vendorDetails);
+			
+			jaldiShoppingResponse.setProductDetails(productDetails);
+			
+			
+		} else {
+
+			jaldiShoppingResponse.setResponseCode(Constants.EMAILID_ALREADY_REGISTERED);
+		    jaldiShoppingResponse.setDescription(Constants.EMAILID_ALREADY_REGISTERED_MESSAGE);
 
 		}
 
@@ -475,7 +516,29 @@ public class AdminController {
 
 	
 
-	private JaldiShoppingResponse prepareMyListResponse(Exception e,List<MyListDetails> myListDetails) {
+	private JaldiShoppingResponse prepareMyListResponse(Exception e) {
+
+		JaldiShoppingResponse jaldiShoppingResponse = new JaldiShoppingResponse();
+		
+		
+
+		if (e == null) {
+			
+			jaldiShoppingResponse.setResponseCode(Constants.SUCCESS_RESPONSE_CODE);
+			jaldiShoppingResponse.setDescription(Constants.SUCCESS_RESPONSE_MESSAGE);
+		
+				
+		} else {
+
+			jaldiShoppingResponse.setResponseCode(Constants.INVALID_PRODUCTID_OR_USERID);
+			jaldiShoppingResponse.setDescription(Constants.INVALID_PRODUCTID_OR_USERID_MESSAGE);
+
+		}
+
+		return jaldiShoppingResponse;
+	}
+
+	private JaldiShoppingResponse prepareMyListDetailsResponse(Exception e,List<MyListDetails> myListDetails, List<ProductDetails> productDetails) {
 
 		JaldiShoppingResponse jaldiShoppingResponse = new JaldiShoppingResponse();
 		
@@ -490,13 +553,12 @@ public class AdminController {
 				
 		} else {
 
-			jaldiShoppingResponse.setResponseCode(exceptionMessageConvertor.getCode(e));
-			jaldiShoppingResponse.setDescription(exceptionMessageConvertor.getMessage(e));
+			jaldiShoppingResponse.setResponseCode(Constants.INVALID_USERID);
+			jaldiShoppingResponse.setDescription(Constants.INVALID_USERID_MESSAGE);
 
 		}
 
 		return jaldiShoppingResponse;
 	}
-
 
 }

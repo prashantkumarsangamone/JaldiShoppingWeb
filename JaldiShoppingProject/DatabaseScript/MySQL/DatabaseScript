@@ -13,7 +13,7 @@ CREATE TABLE js_user_details (
   userEmail varchar(50) UNIQUE KEY,
   userMobile varchar(30) NULL,
   userPassword varchar(80) NOT NULL,
-  zipCode bigint(20) NULL,
+  zipCode bigint NULL,
   enabled tinyint(4) DEFAULT NULL,
   PRIMARY KEY (userId)
 );
@@ -61,7 +61,7 @@ id varchar(255) NOT NULL,
 vendorId BIGINT NOT NULL AUTO_INCREMENT,
 vendorName varchar(255) NOT NULL,
 image varchar(255) NOT NULL,
-locationId bigint(20) NOT NULL,
+locationId bigint NOT NULL,
 foreign key (locationId) references js_location_details(locationId),
 PRIMARY KEY (vendorId)
 );
@@ -97,7 +97,7 @@ state varchar(155) NOT NULL,
 city varchar(155) NOT NULL,
 stateProvCode varchar(155) NOT NULL,
 zipCode varchar(155) NOT NULL,
-vendorId bigint(20) NOT NULL,
+vendorId bigint NOT NULL,
 foreign key (vendorId) references js_vendor_details(vendorId),
 PRIMARY KEY (storeId)
 );
@@ -128,9 +128,9 @@ productQuantity varchar(155) NOT NULL,
 productInfo varchar(255) NULL,
 productReview varchar(255) NULL,
 productImagePath varchar(8000)NULL,
-categoryId bigint(20) NOT NULL,
-vendorId bigint(20) NOT NULL,
-locationId bigint(20) NOT NULL,
+categoryId bigint NOT NULL,
+vendorId bigint NOT NULL,
+locationId bigint NOT NULL,
 foreign key (locationId) references js_location_details(locationId),
 foreign key (categoryId) references js_category_details(categoryId),
 foreign key (vendorId) references js_vendor_details(vendorId),
@@ -153,21 +153,23 @@ insert into js_product_details(id,productId,productName,productCode,barCode,prod
 create table js_mylist_details(
 id varchar(255) NOT NULL,
 mylistId BIGINT NOT NULL AUTO_INCREMENT,
-userId bigint(20) NOT NULL,
-productId bigint(20) NOT NULL, 
+userId bigint NOT NULL,
+productId bigint NOT NULL, 
 foreign key (userId) references js_user_details(userId),
 foreign key (productId) references js_product_details(productId),
 PRIMARY KEY (mylistId)
 );
 
 
+insert into js_mylist_details(id,mylistId,userId,productId)
+ values(1,1,1,'12417833');
 
 /* Cart Details Table*/
 create table js_cart_details(
 id varchar(255) NOT NULL,
 cartDetailsId BIGINT NOT NULL AUTO_INCREMENT,
-userId bigint(20) NOT NULL,
-productId bigint(20) NOT NULL,
+userId bigint NOT NULL,
+productId bigint NOT NULL,
 foreign key (userId) references js_user_details(userId),
 foreign key (productId) references js_product_details(productId),
 PRIMARY KEY (cartDetailsId)
@@ -177,8 +179,8 @@ PRIMARY KEY (cartDetailsId)
 create table js_wishlist_details(
 id varchar(255) NOT NULL,
 wishlistDetailsId BIGINT NOT NULL AUTO_INCREMENT,
-userId bigint(20) NOT NULL,
-productId bigint(20) NOT NULL,
+userId bigint NOT NULL,
+productId bigint NOT NULL,
 foreign key (userId) references js_user_details(userId),
 foreign key (productId) references js_product_details(productId),
 PRIMARY KEY (wishlistDetailsId)
@@ -197,7 +199,7 @@ create table js_offer_details(
 id varchar(255) NOT NULL,
 offerDetailsId BIGINT NOT NULL AUTO_INCREMENT, 
 offerPercentage varchar(255) NOT NULL,
-productId bigint(20) NOT NULL,
+productId bigint NOT NULL,
 foreign key (productId) references js_product_details(productId),
 PRIMARY KEY (offerDetailsId)
 );
@@ -230,9 +232,9 @@ transactionAmount varchar(255) NOT NULL,
 transactionDate timestamp NOT NULL,
 quantity varchar(255) NOT NULL,
 qrCode varchar(255) NOT NULL,  
-userId bigint(20) NOT NULL,
-productId bigint(20) NOT NULL,
-paymentDetailsId bigint(20) NOT NULL,
+userId bigint NOT NULL,
+productId bigint NOT NULL,
+paymentDetailsId bigint NOT NULL,
 foreign key (paymentDetailsId) references js_payment_details(paymentDetailsId),
 foreign key (userId) references js_user_details(userId),
 foreign key (productId) references js_product_details(productId),
@@ -246,9 +248,9 @@ orderId BIGINT NOT NULL AUTO_INCREMENT,
 orderAmount varchar(255) NOT NULL, 
 orderDate timestamp NOT NULL,
 quantity varchar(255) NOT NULL, 
-userId bigint(20) NOT NULL,
-productId bigint(20) NOT NULL,
-paymentDetailsId bigint(20) NOT NULL,
+userId bigint NOT NULL,
+productId bigint NOT NULL,
+paymentDetailsId bigint NOT NULL,
 foreign key (paymentDetailsId) references js_payment_details(paymentDetailsId),
 foreign key (userId) references js_user_details(userId),
 foreign key (productId) references js_product_details(productId),
