@@ -20,25 +20,21 @@
 
 	<jpa:repositories base-package="com.sangamone.jaldishopping.repositories" />
 
-
-
 	<bean
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="locations">
 			<list>
-			
-				
-				 <value>file:${config.home}/db/db.properties</value> 
-				  <value>file:${config.home}/email/email.properties</value>
+			    <value>file:${config.home}/db/db.properties</value> 
+				<value>file:${config.home}/email/email.properties</value>
 				<value>file:${config.home}/sms/sms.properties</value>
 				<value>file:${config.home}/APIDetails/API.properties</value> 	
-						  
-			    
-		<!-- <value>file:///home/cssangam/public_html/JaldiShoppingConfig/db/db.properties</value> 
+						 
+		<!--   
+		<value>file:///home/cssangam/public_html/JaldiShoppingConfig/db/db.properties</value> 
 		<value>file:///home/cssangam/public_html/JaldiShoppingConfig/email/email.properties</value>
 		<value>file:///home/cssangam/public_html/JaldiShoppingConfig/sms/sms.properties</value>
 		<value>file:///home/cssangam/public_html/JaldiShoppingConfig/APIDetails/API.properties</value> 
- 				 -->
+ 			  -->  
 			
  	</list>
 		</property>
@@ -82,6 +78,14 @@
 
 		<property name="requestUrl" value="${walmart.host}" />
 		<property name="requestUrl1" value="${walmart.host1}" />
+
+	</bean>
+
+
+	<!-- Estimote Bean Configuration : API.properties -->
+	<bean id="EstimoteAPIHandler" class="com.sangamone.jaldishopping.handler.EstimoteAPIHandlerImpl">
+
+		<property name="requestUrl2" value="${estimote.host}" />
 
 	</bean>
 

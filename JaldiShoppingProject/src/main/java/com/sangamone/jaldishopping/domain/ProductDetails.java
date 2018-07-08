@@ -2,6 +2,9 @@ package com.sangamone.jaldishopping.domain;
 
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -9,51 +12,51 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "js_product_details")
-public class ProductDetails extends BaseDomain{
+public class ProductDetails {
 	
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Id
 
-	private Long productId;
+	
+	private String productId;
 	private String productName;
 	private String productCode;
 	private String barCode;
 	private String productPrice;
 	private String productQuantity;
-	private String productInfo;
+	private String productType;
 	private String productReview;
-	private String productImagePath;
-	private Long vendorId;
+	private String productRatings;
+	private String productDiscount;
+	private String productFinalPrice;
+	private String currency;
+	private String productMoreInfo;
+	private String productSize;
 	private Long categoryId;
+	private Long vendorId;
 	private Long locationId;
+	private String productImagePath1;
+	private String productImagePath2;
+	
+	
 
-	public Long getVendorId() {
-		return vendorId;
-	}
+	@ManyToOne
+	@JoinColumn(name = "locationId", insertable = false, updatable = false, nullable = false)
+	private LocationDetails locationDetails;
+	
+	@ManyToOne
+	@JoinColumn(name = "categoryId", insertable = false, updatable = false, nullable = false)
+	private CategoryDetails categoryDetails;
+	
+	@ManyToOne
+	@JoinColumn(name = "vendorId", insertable = false, updatable = false, nullable = false)
+	private VendorDetails vendorDetails;
 
-	public void setVendorId(Long vendorId) {
-		this.vendorId = vendorId;
-	}
-
-	public Long getCategoryId() {
-		return categoryId;
-	}
-
-	public void setCategoryId(Long categoryId) {
-		this.categoryId = categoryId;
-	}
-
-	public Long getLocationId() {
-		return locationId;
-	}
-
-	public void setLocationId(Long locationId) {
-		this.locationId = locationId;
-	}
-
-	public Long getProductId() {
+	public String getProductId() {
 		return productId;
 	}
 
-	public void setProductId(Long productId) {
+	public void setProductId(String productId) {
 		this.productId = productId;
 	}
 
@@ -97,12 +100,12 @@ public class ProductDetails extends BaseDomain{
 		this.productQuantity = productQuantity;
 	}
 
-	public String getProductInfo() {
-		return productInfo;
+	public String getProductType() {
+		return productType;
 	}
 
-	public void setProductInfo(String productInfo) {
-		this.productInfo = productInfo;
+	public void setProductType(String productType) {
+		this.productType = productType;
 	}
 
 	public String getProductReview() {
@@ -111,6 +114,94 @@ public class ProductDetails extends BaseDomain{
 
 	public void setProductReview(String productReview) {
 		this.productReview = productReview;
+	}
+
+	public String getProductRatings() {
+		return productRatings;
+	}
+
+	public void setProductRatings(String productRatings) {
+		this.productRatings = productRatings;
+	}
+
+	public String getProductDiscount() {
+		return productDiscount;
+	}
+
+	public void setProductDiscount(String productDiscount) {
+		this.productDiscount = productDiscount;
+	}
+
+	public String getProductFinalPrice() {
+		return productFinalPrice;
+	}
+
+	public void setProductFinalPrice(String productFinalPrice) {
+		this.productFinalPrice = productFinalPrice;
+	}
+
+	public String getCurrency() {
+		return currency;
+	}
+
+	public void setCurrency(String currency) {
+		this.currency = currency;
+	}
+
+	public String getProductMoreInfo() {
+		return productMoreInfo;
+	}
+
+	public void setProductMoreInfo(String productMoreInfo) {
+		this.productMoreInfo = productMoreInfo;
+	}
+
+	public String getProductSize() {
+		return productSize;
+	}
+
+	public void setProductSize(String productSize) {
+		this.productSize = productSize;
+	}
+
+	public Long getCategoryId() {
+		return categoryId;
+	}
+
+	public void setCategoryId(Long categoryId) {
+		this.categoryId = categoryId;
+	}
+
+	public Long getVendorId() {
+		return vendorId;
+	}
+
+	public void setVendorId(Long vendorId) {
+		this.vendorId = vendorId;
+	}
+
+	public Long getLocationId() {
+		return locationId;
+	}
+
+	public void setLocationId(Long locationId) {
+		this.locationId = locationId;
+	}
+
+	public String getProductImagePath1() {
+		return productImagePath1;
+	}
+
+	public void setProductImagePath1(String productImagePath1) {
+		this.productImagePath1 = productImagePath1;
+	}
+
+	public String getProductImagePath2() {
+		return productImagePath2;
+	}
+
+	public void setProductImagePath2(String productImagePath2) {
+		this.productImagePath2 = productImagePath2;
 	}
 
 	public LocationDetails getLocationDetails() {
@@ -136,28 +227,7 @@ public class ProductDetails extends BaseDomain{
 	public void setVendorDetails(VendorDetails vendorDetails) {
 		this.vendorDetails = vendorDetails;
 	}
-	
-
-	public String getProductImagePath() {
-		return productImagePath;
-	}
-
-	public void setProductImagePath(String productImagePath) {
-		this.productImagePath = productImagePath;
-	}
 
 
-	@ManyToOne
-	@JoinColumn(name = "locationId", insertable = false, updatable = false, nullable = false)
-	private LocationDetails locationDetails;
-	
-	@ManyToOne
-	@JoinColumn(name = "categoryId", insertable = false, updatable = false, nullable = false)
-	private CategoryDetails categoryDetails;
-	
-	@ManyToOne
-	@JoinColumn(name = "vendorId", insertable = false, updatable = false, nullable = false)
-	private VendorDetails vendorDetails;
-	
 }
 

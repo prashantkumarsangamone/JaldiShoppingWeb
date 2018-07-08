@@ -1,13 +1,17 @@
 package com.sangamone.jaldishopping.domain;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.Table;
 
 
 @Entity
 @Table(name = "js_location_details")
-public class LocationDetails extends BaseDomain{
-	
+public class LocationDetails {
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Id
 	
 	private Long locationId;
 	private String locationName;

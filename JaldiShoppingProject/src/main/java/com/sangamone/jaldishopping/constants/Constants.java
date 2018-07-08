@@ -26,6 +26,22 @@ public class Constants {
 	public static final String INVALID_USERID = "005";
 	
 	public static final String INVALID_USERID_MESSAGE = "Invalid UserId";
+	
+    public static final String PRODUCT_ALREADY_ADDED = "006";
+	
+	public static final String PRODUCT_ALREADY_ADDED_MESSAGE = "Product already added to Cart";
+
+	public static final String CART_IS_EMPTY = "007";
+		
+	public static final String CART_IS_EMPTY_MESSAGE = "Cart is Empty";
+	
+	public static final String PRODUCT_ALREADY_DELETED = "008";
+	
+	public static final String PRODUCT_ALREADY_DELETED_MESSAGE = "Product Already Deleted";
+	
+    public static final String PRODUCT_DOES_NOT_EXIST = "009";
+	
+	public static final String PRODUCT_DOES_NOT_EXIST_MESSAGE = "Product Does Not Exist";
 
 
 

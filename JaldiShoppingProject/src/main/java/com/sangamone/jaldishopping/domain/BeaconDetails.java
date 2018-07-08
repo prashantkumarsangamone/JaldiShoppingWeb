@@ -3,13 +3,17 @@ package com.sangamone.jaldishopping.domain;
 
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "js_beacon_details")
-public class BeaconDetails extends BaseDomain{
+public class BeaconDetails{
   
-    
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Id
 	private String beaconId;
 	
 	private String appId;	
@@ -49,6 +53,7 @@ public class BeaconDetails extends BaseDomain{
 	public void setLocationId(String locationId) {
 		this.locationId = locationId;
 	}
+
 
 	
 }

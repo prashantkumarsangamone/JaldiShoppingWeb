@@ -2,10 +2,15 @@ package com.sangamone.jaldishopping.controller;
 
 import java.util.List;
 
+import com.sangamone.jaldishopping.domain.BeaconLocations;
+import com.sangamone.jaldishopping.domain.CartDetails;
 import com.sangamone.jaldishopping.domain.MyListDetails;
+import com.sangamone.jaldishopping.domain.OrderDetails;
 import com.sangamone.jaldishopping.domain.ProductDetails;
+import com.sangamone.jaldishopping.domain.TransactionDetails;
 import com.sangamone.jaldishopping.domain.UserDetails;
 import com.sangamone.jaldishopping.domain.VendorDetails;
+import com.sangamone.jaldishopping.domain.WishlistDetails;
 
 public class JaldiShoppingResponse {
 	
@@ -27,7 +32,15 @@ public class JaldiShoppingResponse {
 	
 	private List<MyListDetails> myListDetails;
 	
+	private List<WishlistDetails> wishlistDetails;
 	
+	private List<CartDetails> cartDetails;
+	
+	private List<OrderDetails> orderDetails;
+	
+	private List<BeaconLocations> beaconLocations;
+	
+	private List<TransactionDetails> transactionDetails;
 
 	public String getResponseCode() {
 		return responseCode;
@@ -99,6 +112,46 @@ public class JaldiShoppingResponse {
 
 	public void setMyListDetails(List<MyListDetails> myListDetails) {
 		this.myListDetails = myListDetails;
+	}
+
+	public List<CartDetails> getCartDetails() {
+		return cartDetails;
+	}
+
+	public void setCartDetails(List<CartDetails> cartDetails) {
+		this.cartDetails = cartDetails;
+	}
+
+	public List<OrderDetails> getOrderDetails() {
+		return orderDetails;
+	}
+
+	public void setOrderDetails(List<OrderDetails> orderDetails) {
+		this.orderDetails = orderDetails;
+	}
+
+	public List<BeaconLocations> getBeaconLocations() {
+		return beaconLocations;
+	}
+
+	public void setBeaconLocations(List<BeaconLocations> beaconLocations) {
+		this.beaconLocations = beaconLocations;
+	}
+
+	public List<WishlistDetails> getWishlistDetails() {
+		return wishlistDetails;
+	}
+
+	public void setWishlistDetails(List<WishlistDetails> wishlistDetails) {
+		this.wishlistDetails = wishlistDetails;
+	}
+
+	public List<TransactionDetails> getTransactionDetails() {
+		return transactionDetails;
+	}
+
+	public void setTransactionDetails(List<TransactionDetails> transactionDetails) {
+		this.transactionDetails = transactionDetails;
 	}
 
 	

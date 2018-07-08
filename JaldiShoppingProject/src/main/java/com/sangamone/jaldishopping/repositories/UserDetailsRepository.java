@@ -10,6 +10,8 @@ public interface UserDetailsRepository  extends CrudRepository<UserDetails, Stri
 	UserDetails findByUserEmail(String userEmail);
 
 	UserDetails findByUserEmailAndUserPassword(String userEmail, String userPassword);
+
+	UserDetails findByUserId(Long userId);
 	
 	
 

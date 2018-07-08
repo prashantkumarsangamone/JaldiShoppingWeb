@@ -3,6 +3,9 @@ package com.sangamone.jaldishopping.domain;
 import java.sql.Timestamp;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -10,9 +13,10 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "js_transaction_details")
-public class TransactionDetails extends BaseDomain{
+public class TransactionDetails {
 	
-	
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Id
 	
 	private Long transactionId;
 	private String transactionAmount;
@@ -21,6 +25,23 @@ public class TransactionDetails extends BaseDomain{
 	private String qrCode;
 	
 	
+
+
+	@ManyToOne
+	@JoinColumn(name = "paymentDetailsId", insertable = true, updatable = true, nullable = true)
+	private PaymentDetails paymentDetails;
+	
+
+	@ManyToOne
+	@JoinColumn(name = "userId", insertable = true, updatable = true, nullable = true)
+	private UserDetails userDetails;
+	
+
+	@ManyToOne
+	@JoinColumn(name = "productId", insertable = true, updatable = true, nullable = true)
+	private ProductDetails productDetails;
+
+
 	public Long getTransactionId() {
 		return transactionId;
 	}
@@ -99,21 +120,6 @@ public class TransactionDetails extends BaseDomain{
 	public void setProductDetails(ProductDetails productDetails) {
 		this.productDetails = productDetails;
 	}
-
-
-	@ManyToOne
-	@JoinColumn(name = "paymentDetailsId", insertable = true, updatable = true, nullable = true)
-	private PaymentDetails paymentDetails;
-	
-
-	@ManyToOne
-	@JoinColumn(name = "userId", insertable = true, updatable = true, nullable = true)
-	private UserDetails userDetails;
-	
-
-	@ManyToOne
-	@JoinColumn(name = "productId", insertable = true, updatable = true, nullable = true)
-	private ProductDetails productDetails;
 	
 	
 }

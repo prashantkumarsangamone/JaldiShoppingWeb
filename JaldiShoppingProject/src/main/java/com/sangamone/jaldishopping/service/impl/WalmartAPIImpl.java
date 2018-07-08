@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 import com.sangamone.jaldishopping.controller.Items;
 import com.sangamone.jaldishopping.controller.Response;
 import com.sangamone.jaldishopping.domain.ProductDetails;
@@ -25,7 +24,7 @@ public class WalmartAPIImpl implements WalmartAPIRequestSender {
 	public Response sendRequest(ProductDetails productDetails) {
 		try {
 			
-			Response response = walmartAPIHandler.sendRequest(productDetails.getProductId());
+			Response response = walmartAPIHandler.sendRequest(Long.valueOf(productDetails.getProductId()));
 			return response;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -38,7 +37,7 @@ public class WalmartAPIImpl implements WalmartAPIRequestSender {
 
 
 	@Override
-	public Response sendRequest1(Long productId) {
+	public Response sendRequest1(String productId) {
 try {
 			
 			Response response = walmartAPIHandler.sendRequest1(productId);
@@ -63,6 +62,7 @@ try {
 		
 		}
 	}
+
 
 
 }

@@ -2,6 +2,9 @@ package com.sangamone.jaldishopping.domain;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -13,12 +16,13 @@ import org.hibernate.annotations.NotFoundAction;
 
 @Entity
 @Table(name = "js_mylist_details")
-public class MyListDetails extends BaseDomain{
-	
+public class MyListDetails {
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Id
 	
 	private Long mylistId;
 	private Long userId;
-	private Long productId;
+	private String productId;
 	
 	
 	@ManyToOne
@@ -46,13 +50,12 @@ public class MyListDetails extends BaseDomain{
 	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
-	
 
-	public Long getProductId() {
+	public String getProductId() {
 		return productId;
 	}
 
-	public void setProductId(Long productId) {
+	public void setProductId(String productId) {
 		this.productId = productId;
 	}
 
